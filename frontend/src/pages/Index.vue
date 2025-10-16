@@ -1,24 +1,29 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { getPosts } from "../sanity";
-import type { Post } from "../resources/interfaces/post.interface";
-import Posts from "../components/Posts.vue";
+import Posts from "../components/content/Posts.vue";
 import Fold from "../components/content/Fold.vue";
+import { defineAsyncComponent, onBeforeMount, onMounted } from "vue";
 
-const posts = ref<Array<Post>>([]);
+onBeforeMount(() => {
+  console.time("Index");
+})
 
-onMounted(async () => {
-  try {
-    posts.value = await getPosts();
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-  }
-});
+onMounted(() => {
+  console.timeEnd("Index");
+})
+
+// const asyncPosts = defineAsyncComponent(() => import("../components/content/Posts.vue"))
 </script>
 <template>
   <section>
+    <h2 class="visually-hidden">Maatwerk Interieur Project Starten? Vraag Advies in Izegem.</h2>
     <Fold></Fold>
-    <Posts></Posts>
+    <!-- <Suspense>
+      <asyncPosts />
+      <template #fallback>
+        <div>Loading...</div>
+      </template>
+    </Suspense> -->
+    <Posts />
   </section>
 </template>
 <style lang="scss" scoped>
