@@ -1,0 +1,23 @@
+{
+  "name": "cms-template",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:studio\" \"npm run dev:frontend\"",
+    "dev:studio": "cd studio && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd studio && npm install && cd ../frontend && npm install",
+    "i:all": "npm run install:all",
+    "build": "concurrently \"npm run build:studio\" \"npm run build:frontend\"",
+    "build:frontend": "cd frontend && npm run build",
+    "build:studio": "cd studio && npm run build",
+    "copy-env": "cp .env studio/.env && cp .env frontend/.env"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.0"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "dotenv": "^16.5.0"
+  }
+}

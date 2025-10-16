@@ -1,0 +1,39 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run generate-sitemap && vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "generate-sitemap": "node scripts/generateSitemap.js"
+  },
+  "dependencies": {
+    "@portabletext/block-tools": "^2.0.0",
+    "@portabletext/to-html": "^2.0.14",
+    "@portabletext/types": "^2.0.13",
+    "@sanity/client": "^7.6.0",
+    "@sanity/image-url": "^1.1.0",
+    "@sanity/schema": "^4.1.1",
+    "@sanity/types": "^4.1.1",
+    "@vueuse/core": "^13.5.0",
+    "@vueuse/head": "^2.0.0",
+    "@vueuse/router": "^13.5.0",
+    "dayjs": "^1.11.13",
+    "pdfjs-dist": "^5.4.54",
+    "sitemap": "^8.0.0",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1",
+    "xml-formatter": "^3.6.6"
+  },
+  "devDependencies": {
+    "@types/pdfjs-dist": "^2.10.377",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/tsconfig": "^0.7.0",
+    "sass-embedded": "^1.89.2",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.0",
+    "vue-tsc": "^2.2.10"
+  }
+}
