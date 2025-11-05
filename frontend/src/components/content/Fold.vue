@@ -1,13 +1,55 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { nextTick, onMounted, ref } from 'vue';
+import { tl, mm } from '../../resources/gsap';
+
+const image = ref<HTMLElement | null>(null);
+
+onMounted(async () => {
+    await nextTick(() => {
+        //timeout to ensure image is loaded
+        setTimeout(() => {
+            if (image.value) {
+                mm.add("(min-width: 1000px)", () => {
+                    // Get initial dimensions of the image
+
+                    if (!image.value) return;
+
+                    const initialRect = image.value.getBoundingClientRect();
+                    const viewportWidth = window.innerWidth;
+                    const viewportHeight = window.innerHeight;
+
+                    // Calculate scale factors needed to fill viewport
+                    const scaleX = viewportWidth / initialRect.width;
+                    const scaleY = viewportHeight / initialRect.height;
+                    const scaleFactor = Math.max(scaleX, scaleY);
+
+                    tl.to('.fold__image-container-image',
+                        {
+                            scale: scaleFactor + 0.2,
+                            ease: 'none',
+                            scrollTrigger: {
+                                trigger: '.fold',
+                                start: 'top top',
+                                end: '+=50% top',
+                                scrub: true,
+                                pin: true,
+                            }
+                        }, 0);
+                });
+            }
+        }, 300);
+    });
+});
+</script>
 <template>
     <article class="fold">
         <div class="fold__content">
             <h1 class="visually-hidden">Ontdek wie Atelier Buyck is en wat ze doen</h1>
             <p class="fold__content-title">Start hier uw droomproject</p>
             <div class="fold__image-container">
-                <img class="fold__image-container-image" src="../../assets/img/fold-image@1440.png" alt=""
+                <img ref="image" class="fold__image-container-image" src="../../assets/img/fold-image@1440.png" alt=""
                     srcset="../../assets/img/fold-image@720.png 720w, ../../assets/img/fold-image@1440.png 1440w, ../../assets/img/fold-image@2160.png 2160w"
-                    fetchpriority=" high" sizes="720vw, (min-width: 1000px) 1440vw, (min-width: 2000px) 2160w">
+                    fetchpriority=" high" sizes="(min-width: 1000px) 1440vw, (min-width: 2000px) 2160w, 720w">
                 <p>scroll en ontdek</p>
             </div>
             <p class="fold__content-description">Wij creëren maatwerk interieurs met een focus op detail, vakmanschap en
@@ -50,10 +92,11 @@
     @media screen and (min-width: 500px) {
         width: calc(100% - var(--spacing-l) * 2);
     }
+
     @media screen and (min-width: 1440px) {
         font-size: 16rem;
     }
-    
+
 
 }
 
@@ -93,7 +136,7 @@
     @media screen and (min-width: 500px) {
         padding: var(--spacing-l);
     }
-    
+
     @media screen and (min-width: 1050px) {
         padding: var(--spacing-xl);
         grid-template-columns: 31rem 1fr 31rem;
@@ -101,10 +144,11 @@
         max-width: 144rem;
     }
 
-    @media screen and (min-width:1150px ) {
+    @media screen and (min-width:1150px) {
         gap: var(--spacing-xxl);
     }
-    @media screen and (min-width:1350px ) {
+
+    @media screen and (min-width:1350px) {
         gap: var(--spacing-xxxl);
     }
 }
@@ -132,5 +176,12 @@
     gap: var(--spacing-l);
 
     flex-flow: column;
+}
+
+.fold__image-container-image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
 }
 </style>

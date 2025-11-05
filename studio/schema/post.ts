@@ -1,32 +1,29 @@
 import { defineField, defineType } from 'sanity'
 import { DocumentIcon } from '@sanity/icons'
-import contentImage from './contentImage'
+import { contentImage } from './contentImage'
 
-export default defineType({
+export const post = defineType({
   name: 'post',
-  title: 'Posts',
   type: 'document',
   icon: DocumentIcon,
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
       type: 'string',
       validation: (Rule) => Rule.required().error('Title is required'),
     }),
     defineField({
       name: 'slug',
-      title: 'Slug',
       type: 'slug',
       options: {
         source: 'title',
         maxLength: 96,
       },
+      hidden: ({ document }) => !document?.title,
       validation: (Rule) => Rule.required().error('Slug is required'),
     }),
     defineField({
       name: 'body',
-      title: 'Body',
       type: 'array',
       of: [{ type: 'block' }],
       validation: (Rule) => Rule.required().error('Body is required'),
@@ -72,10 +69,17 @@ export default defineType({
       },
       validation: (Rule) => Rule.required().error('Color Scheme is required'),
     }),
+    defineField({
+      name: 'callToAction',
+      type: 'string',
+      initialValue: 'Vraag uw offerte aan',
+      validation: (Rule) => Rule.required()
+    })
   ],
   preview: {
     select: {
       title: 'title',
+      description: 'year',
       media: 'contentImage',
     },
   },

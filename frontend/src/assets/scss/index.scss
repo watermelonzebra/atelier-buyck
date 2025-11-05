@@ -2,7 +2,9 @@
 @use './fonts.scss';
 @use './root.scss' as *;
 
-html, body, #app {
+html,
+body,
+#app {
   min-height: 100dvh;
   max-width: 100dvw;
   margin: 0;
@@ -10,15 +12,15 @@ html, body, #app {
 
   overflow-x: hidden;
 
-  color: var(--main-darkest)
+  color: var(--main-darkest);
 }
 
 body {
-  @include line-height(1.4);
   height: 100%;
 
   font-size: var(--font-size-p);
   font-family: var(--font-family-p);
+  line-height: 1.6;
 
   background-color: var(--white);
 }
@@ -28,8 +30,10 @@ body {
   flex-direction: column;
 }
 
-h1,h2,h3 {
-  font-family: var(--font-family-h); 
+h1,
+h2,
+h3 {
+  font-family: var(--font-family-h);
   font-weight: bold;
 }
 
@@ -50,7 +54,7 @@ strong {
 }
 
 p {
-  line-height: 2;
+  line-height: 1.8;
 }
 
 .button {
@@ -86,8 +90,8 @@ p {
 .visually-hidden {
   opacity: 0;
   position: absolute;
-  top: -1000;
-  left: -1000;
+  top: 1000;
+  left: 1000;
   height: 0;
   width: 0;
 }

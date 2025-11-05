@@ -1,18 +1,10 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { presentationTool } from 'sanity/presentation'
-import { visionTool } from '@sanity/vision'
 import { media } from 'sanity-plugin-media'
 
-import { schemaTypes } from './schemas'
+import { schemaTypes } from './schema/index'
 import { deskStructure } from './DeskStructure'
-
-console.log('Sanity Studio Configuration Loaded')
-console.log('Project Name:', process.env.SANITY_STUDIO_PROJECT_NAME)
-console.log('Title:', process.env.SANITY_STUDIO_TITLE)
-console.log('Project ID:', process.env.SANITY_STUDIO_PROJECT_ID)
-console.log('Dataset:', process.env.SANITY_STUDIO_DATASET)
-console.log('Preview URL:', process.env.SANITY_STUDIO_PREVIEW_URL)
 
 export default defineConfig({
   name: process.env.SANITY_STUDIO_PROJECT_NAME,
@@ -37,6 +29,7 @@ export default defineConfig({
   ],
 
   schema: {
+    name: 'default',
     types: schemaTypes,
-  },
+  }
 })

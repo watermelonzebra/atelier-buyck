@@ -21,13 +21,17 @@
     "@vueuse/head": "^2.0.0",
     "@vueuse/router": "^13.5.0",
     "dayjs": "^1.11.13",
+    "groq": "^4.11.0",
+    "gsap": "^3.13.0",
     "pdfjs-dist": "^5.4.54",
+    "remixicon": "^4.7.0",
     "sitemap": "^8.0.0",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1",
     "xml-formatter": "^3.6.6"
   },
   "devDependencies": {
+    "@types/gsap": "^1.20.2",
     "@types/pdfjs-dist": "^2.10.377",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/tsconfig": "^0.7.0",

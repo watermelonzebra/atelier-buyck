@@ -19,9 +19,10 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "includes": [
+  "include": [
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "sanity.types.ts"
   ],
   "exclude": [
     "node_modules",

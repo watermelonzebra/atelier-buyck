@@ -1,31 +1,26 @@
 <script setup lang="ts">
-import Posts from "../components/content/Posts.vue";
+import Contact from "../components/content/Contact.vue";
 import Fold from "../components/content/Fold.vue";
-import { defineAsyncComponent, onBeforeMount, onMounted } from "vue";
+import { defineAsyncComponent, onUnmounted } from "vue";
+import { tl } from "../resources/gsap";
 
-onBeforeMount(() => {
-  console.time("Index");
+onUnmounted(() => {
+  tl.clear()
 })
 
-onMounted(() => {
-  console.timeEnd("Index");
-})
-
-// const asyncPosts = defineAsyncComponent(() => import("../components/content/Posts.vue"))
+const asyncPosts = defineAsyncComponent(() => import("../components/content/Posts.vue"))
 </script>
 <template>
   <section>
-    <h2 class="visually-hidden">Maatwerk Interieur Project Starten? Vraag Advies in Izegem.</h2>
+    <h1 class="visually-hidden">Maatwerk Interieur Project Starten? Vraag Advies in Izegem.</h1>
     <Fold></Fold>
-    <!-- <Suspense>
+    <Suspense>
       <asyncPosts />
       <template #fallback>
         <div>Loading...</div>
       </template>
-    </Suspense> -->
-    <Posts />
+    </Suspense>
+    <Contact></Contact>
   </section>
 </template>
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
