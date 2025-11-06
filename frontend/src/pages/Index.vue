@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import Contact from "../components/content/Contact.vue";
 import Fold from "../components/content/Fold.vue";
-import { defineAsyncComponent, onUnmounted } from "vue";
-import { tl } from "../resources/gsap";
-
-onUnmounted(() => {
-  tl.clear()
-})
+import { defineAsyncComponent } from "vue";
 
 const asyncPosts = defineAsyncComponent(() => import("../components/content/Posts.vue"))
 </script>

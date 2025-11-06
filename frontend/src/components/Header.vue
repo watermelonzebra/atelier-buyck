@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { RouterLink } from "vue-router";
 
 const navToggleInput = ref<HTMLInputElement | null>(null);
@@ -13,43 +13,70 @@ function handleClose() {
 const header = ref<HTMLElement | null>(null);
 const circleElement = ref<HTMLElement | null>(null);
 
-onMounted(() => {
-  window.addEventListener("resize", handleClose);
+const lastScrollTop = ref<number>(0);
+// --- CONFIGURATION CONSTANTS ---
+const MOBILE_MAX_WIDTH = 600;
 
-  // make the header stay an disappear on scroll down, and appear on scroll up
-  let lastScrollTop = 0;
-  let timeout: NodeJS.Timeout | null = null;
-  window.addEventListener("scroll", () => {
-    if (timeout) clearTimeout(timeout)
+const isMobileViewport = computed(() => document.body.getBoundingClientRect().width <= MOBILE_MAX_WIDTH);
 
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    if (header.value) {
-      if (scrollTop === 0) {
-        header.value.classList.remove("has-background");
-        header.value.classList.remove("no-overflow");
-      } else {
-        header.value.classList.add("has-background");
-        header.value!.classList.add("no-overflow");
-      }
+function handleScroll() {
 
-      if (scrollTop > lastScrollTop) {
-        // downscroll
-        header.value.style.transform = "translateY(-200%)";
-        if (circleElement.value) {
-          circleElement.value.classList.add('hide-transform')
-        }
-      } else {
-        // upscroll
-        header.value.style.transform = "translateY(0)";
-        if (circleElement.value) {
-          circleElement.value.classList.remove('hide-transform')
-        }
-      }
+  // 1. Primary Guard Clause: Exit if header element is not available
+  if (!header.value) {
+    console.error("Header element not found.");
+    return;
+  }
+
+  // 2. Get scroll metrics
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+  // Bools for clarity
+  const isAtTop = scrollTop === 0;
+  const isScrollingDown = scrollTop > lastScrollTop.value;
+
+  // ----------------------------------------------------
+  // A. Background and Mobile Overflow (Position-based logic)
+  // ----------------------------------------------------
+  if (isAtTop) {
+    header.value.classList.remove("has-background", "no-overflow");
+  } else {
+    header.value.classList.add("has-background");
+
+    if (isMobileViewport.value) {
+      // Apply the special class only on mobile when scrolled
+      header.value.classList.remove("no-overflow");
+      console.log('Added no-overflow on mobile.');
+    } else {
+      // Ensure the class is removed if the user scrolls on a desktop view
+      header.value.classList.add("no-overflow");
     }
+  }
 
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
-  });
+  // ----------------------------------------------------
+  // B. Hide/Show (Direction-based logic)
+  // ----------------------------------------------------
+  if (isScrollingDown) {
+    // Hide the header and circle element
+    header.value.classList.add("header-hidden");
+    circleElement.value?.classList.add('hide-transform');
+  } else if (scrollTop < lastScrollTop.value) {
+    // Show the header and circle element (scrolling up)
+    header.value.classList.remove("header-hidden");
+    circleElement.value?.classList.remove('hide-transform');
+  }
+
+  // 3. Update last scroll position (ensure it doesn't go below 0)
+  lastScrollTop.value = Math.max(0, scrollTop);
+};
+
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
 });
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 <template>
   <header ref="header">
@@ -96,9 +123,13 @@ header {
 
   position: fixed;
   top: 0;
-  z-index: 50;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 
   transition: transform 0.75s cubic-bezier(1, -0.3, 0.1, 1);
+  transform: translateY(0);
+  /* Default: Visible */
 
   &.has-background {
     background-color: var(--white);
@@ -106,6 +137,11 @@ header {
 
   &.no-overflow {
     overflow: hidden;
+  }
+
+  &.header-hidden {
+    /* Hides the header completely */
+    transform: translateY(-200%);
   }
 }
 

@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
-import { getPosts } from "../../sanity";
+import { computed, nextTick, onBeforeUnmount, onMounted } from "vue";
 import { getSanityImageUrl, sizes, getSanityImageSrcSet } from "../../helpers/sanity-image.helper";
 import { RouterLink } from "vue-router";
-import type { Post } from "../../resources/interfaces/sanity.types";
 import gsap from "gsap";
+import { usePosts } from "../../composables/usePosts";
 
-const posts = ref<Array<Post>>([]);
-const postsAmount = computed(() => posts.value.length)
+const { posts, getAllPosts } = usePosts();
+const clampedPosts = computed(() => posts.value?.slice(0, 3));
+const postsAmount = computed(() => clampedPosts.value?.length || 0)
 
 let projectsTimeline: gsap.core.Timeline;
 
 async function loadGsapPostAnimations(timeline: gsap.core.Timeline, mm: gsap.MatchMedia) {
 
   const postElements = gsap.utils.toArray<HTMLElement>(".projects__posts-item");
+
   // Set initial state and Z-index
   // Z-index explanation: This ensures the post with the highest index (the one currently
   // scaling up) is always visible on top of the previously scaled post.
@@ -90,7 +91,7 @@ async function loadGsapAnimations() {
           end: `+=${(100 * postsAmount.value) + (isDesktop ? 50 : 0)}%`,
           pin: true,
           pinReparent: true,
-          scrub: 1,
+          scrub: true,
         },
       })
 
@@ -103,8 +104,7 @@ async function loadGsapAnimations() {
 
 onMounted(async () => {
   try {
-    posts.value = await getPosts();
-
+    if (!posts.value?.length) await getAllPosts()
     await nextTick(async () => {
       await loadGsapAnimations();
     })
@@ -112,16 +112,12 @@ onMounted(async () => {
     console.error("Error fetching posts:", error);
   }
 });
-
-onUnmounted(() => {
-  projectsTimeline.scrollTrigger?.kill()
-})
 </script>
 <template>
   <article class="projects" id="projects">
     <h2 class="projects__title">Ontdek Ons Schrijnwerk & Maatwerk</h2>
     <ul class="projects__posts">
-      <li v-for="(post, index) in posts" :key="post._id"
+      <li v-for="(post, index) in clampedPosts" :key="post._id"
         :class="['projects__posts-item', index % 2 === 0 ? 'left' : 'right']">
         <RouterLink :to="{ name: 'Details', params: { slug: post.slug?.current } }">
           <img :src="getSanityImageUrl(post.contentImage)" :srcset="getSanityImageSrcSet(post.contentImage)" :sizes
@@ -161,11 +157,11 @@ onUnmounted(() => {
 
 .projects__title {
   text-align: center;
-  font-size: 10vw;
-  line-height: 1.5;
+  font-size: 10vw !important;
+  line-height: 1.6 !important;
 
   @media screen and (min-width: 1440px) {
-    font-size: 14.5rem;
+    font-size: 14.5rem !important;
     margin: 0 auto;
   }
 }
@@ -277,7 +273,11 @@ onUnmounted(() => {
   }
 
   @media screen and (min-width: 500px) {
-    font-size: 3vw;
+
+    >h3 {
+      font-size: 3vw !important;
+      line-height: 1.6;
+    }
   }
 
   @media screen and (min-width: 700px) {

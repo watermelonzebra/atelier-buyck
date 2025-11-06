@@ -68,12 +68,13 @@
           <ul class="footer-section__socials-list">
             <li class="footer-section__socials-list-item">
               <a href="https://www.facebook.com/p/Atelier-Buyck-100088506063648/" target="_blank"
-                rel="noopener noreferrer">
+                aria-label="naar Atelier Buyck's Facebook pagina" rel="noopener noreferrer">
                 <i class="ri-facebook-box-fill"></i>
               </a>
             </li>
             <li class="footer-section__socials-list-item">
-              <a href="https://www.instagram.com/atelierbuyck/" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.instagram.com/atelierbuyck/" target="_blank" rel="noopener noreferrer"
+                aria-label="naar Atelier Buyck's Instagram pagina">
                 <i class="ri-instagram-fill"> </i>
               </a>
             </li>

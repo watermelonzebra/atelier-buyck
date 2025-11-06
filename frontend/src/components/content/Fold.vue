@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { nextTick, onMounted, ref } from 'vue';
-import { tl, mm } from '../../resources/gsap';
+import { mm, gsap } from '../../resources/gsap';
 
 const image = ref<HTMLElement | null>(null);
 
@@ -23,18 +23,38 @@ onMounted(async () => {
                     const scaleY = viewportHeight / initialRect.height;
                     const scaleFactor = Math.max(scaleX, scaleY);
 
-                    tl.to('.fold__image-container-image',
+                    const foldTimeline = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: '.fold',
+                            start: 'top top',
+                            end: '+=50% top',
+                            scrub: true,
+                            pin: true,
+                        }
+                    })
+
+                    foldTimeline.to('.fold__image-container-image',
                         {
-                            scale: scaleFactor + 0.2,
+                            scale: scaleFactor + 0.5,
                             ease: 'none',
-                            scrollTrigger: {
-                                trigger: '.fold',
-                                start: 'top top',
-                                end: '+=50% top',
-                                scrub: true,
-                                pin: true,
-                            }
-                        }, 0);
+                            filter: 'grayscale(100%) hue-rotate(90deg)',
+                        }, 0)
+                    foldTimeline.to('.fold__firmname',
+                        {
+                            transform: 'translateX(-50%) translateY(-50%)',
+                            height: 'max-content',
+                            top: '50%',
+                            zIndex: 10,
+                            ease: 'none',
+                        }, 0)
+                    foldTimeline.to('.fold__firmname',
+                        {
+                            ease: 'none',
+                            scale: 80,
+                            color: 'var(--main-darkest)',
+                            duration: 2,
+                        }, 1)
+
                 });
             }
         }, 300);
@@ -183,5 +203,7 @@ onMounted(async () => {
     height: auto;
     max-width: 100%;
     max-height: 100%;
+    background-color: var(--black);
+    background-blend-mode: screen;
 }
 </style>

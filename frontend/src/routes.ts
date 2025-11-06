@@ -1,4 +1,4 @@
-import { nextTick } from "vue";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   createRouter,
   createWebHistory,
@@ -32,33 +32,13 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior: async (to, _from, _savedPosition) => {
-    if (to.name === "Details")
-      return { left: 0, top: 0, behavior: 'instant' };
-
-    if (to.hash) {
-      await nextTick(() => {
-        console.log('scroll')
-        return {
-          el: to.hash,
-          behavior: to.hash === '#contact' ? 'instant' : 'smooth',
-          top: 50,
-        };
-      });
-
-    }
-
-    // Return saved position for main page if available
-    if (_savedPosition && to.name === "Index") {
-      return {
-        ..._savedPosition,
-        behavior: 'instant'
-      };
-    }
-
-    // Default to top of page
-    return { top: 0 };
+  scrollBehavior: async (_to, _from, _savedPosition) => {
+    return { left: 0, top: 0, behavior: 'instant' };
   },
 });
+
+router.beforeEach(() => {
+  ScrollTrigger.getAll().forEach((st) => st.kill())
+})
 
 export default router;

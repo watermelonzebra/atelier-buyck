@@ -5,6 +5,7 @@ import type { Post } from "../resources/interfaces/sanity.types";
 interface ImageOptions {
   width?: number;
   height?: number;
+  maxWidth?: number;
   aspectRatio?: number,
 }
 
@@ -42,11 +43,23 @@ function getSanityImageUrl(source: Post['contentImage'], options: ImageOptions =
 
 // Helper function to generate srcSet for responsive images
 function getSanityImageSrcSet(source: Post['contentImage'], options: ImageOptions = {}) {
-  const widths = [300, 600, 900, 1200, 1800, 2400];
+  const widths: Array<number> = [300, 600, 900, 1200, 1800, 2400].map((w, i, a) => {
+    if (!options.maxWidth) return w;
+
+    const isMaxBiggerThanPrevious = options.maxWidth! > (a[i - 1] || 0);
+    const isMaxSmallerThanCurrent = options.maxWidth! < w;
+
+    if (isMaxSmallerThanCurrent) {
+      if (isMaxBiggerThanPrevious) return options.maxWidth;
+      return null
+    }
+
+    return w;
+  }).filter((w) => w !== null)
 
   const heights = widths.map((width) => {
     return width * (options?.aspectRatio ?? (source?.asset as any)?.metadata!.dimensions.aspectRatio)
-  });
+  })
 
   const srcSet = widths
     .map((width, i) => {

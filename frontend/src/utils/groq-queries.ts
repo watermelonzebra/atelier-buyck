@@ -18,6 +18,7 @@ const postInterface = `{
       colorScheme,
       body,
       "contentImage": contentImage.asset->,
+      callToAction
     }`;
 
 const POST_QUERY = defineQuery(`

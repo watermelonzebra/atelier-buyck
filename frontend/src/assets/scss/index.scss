@@ -28,6 +28,7 @@ body {
 #app {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 h1,

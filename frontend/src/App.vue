@@ -2,8 +2,17 @@
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
 import { RouterView, useRoute } from "vue-router";
+import { onBeforeMount } from "vue";
 
-const route = useRoute()
+const route = useRoute();
+
+import { usePosts } from "./composables/usePosts";
+
+const { getAllPosts } = usePosts()
+
+onBeforeMount(() => {
+  getAllPosts()
+})
 </script>
 
 <template>
