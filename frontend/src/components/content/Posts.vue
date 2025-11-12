@@ -25,7 +25,7 @@ async function loadGsapPostAnimations(timeline: gsap.core.Timeline, mm: gsap.Mat
       scale: 1,
       ease: "power4.inOut",
       duration: 0.4
-    }, i - 0.9)
+    }, i)
 
 
     const postContent = post.querySelector('.projects__posts-item__content')
@@ -53,10 +53,11 @@ async function loadGsapPostAnimations(timeline: gsap.core.Timeline, mm: gsap.Mat
           scale: 1.5,
           translateX: '-50%',
           translateY: '-50%',
+          ease: "power4.inOut",
           width: largestSide,
           height: largestSide,
           duration: 0.3
-        }, i - 0.6);
+        });
 
       })
 
@@ -67,7 +68,7 @@ async function loadGsapPostAnimations(timeline: gsap.core.Timeline, mm: gsap.Mat
       y: 100,
       ease: "none",
       duration: 0.2,
-    }, i - 0.4)
+    });
   })
 }
 
@@ -87,7 +88,7 @@ async function loadGsapAnimations() {
       projectsTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: '.projects',
-          start: `${isDesktop ? '+=50% top' : 'top top'}`,
+          start: `${isDesktop ? '+=75% top' : 'top top'}`,
           end: `+=${(100 * postsAmount.value) + (isDesktop ? 50 : 0)}%`,
           pin: true,
           pinReparent: true,
@@ -225,7 +226,7 @@ onMounted(async () => {
     color: var(--main-light)
   }
 
-  &.light-brown {
+  &.brown {
     background-color: var(--main);
     color: var(--main-lightest);
   }
@@ -256,7 +257,7 @@ onMounted(async () => {
     color: var(--main-light)
   }
 
-  &.light-brown {
+  &.brown {
     color: var(--main-lightest);
   }
 

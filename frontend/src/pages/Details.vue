@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useRouteParams } from "@vueuse/router";
 import { useRouter } from "vue-router";
-import { nextTick, onBeforeUnmount, onMounted, onUnmounted, ref, watch, type Ref } from "vue";
+import { nextTick, onMounted, onUnmounted, ref, watch, type Ref } from "vue";
 import { getSanityImageSrcSet, getSanityImageUrl, sizes } from "../helpers/sanity-image.helper";
 import { toHTML } from "@portabletext/to-html";
 import type { Post } from "../resources/interfaces/sanity.types";
 import type { TypedObject } from "@sanity/types";
 import { usePosts } from "../composables/usePosts";
-import { gsap } from '../resources/gsap';
+import { gsap, mm } from '../resources/gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 type PageColors = 'yellow' | 'brown' | 'green' | 'dark-brown' | 'white';
@@ -17,11 +17,21 @@ interface Colors {
   square: PageColors,
 }
 
+const showTransitionAnimation = ref(false);
+
 const slug = useRouteParams("slug");
 const router = useRouter();
 const post = ref<Post | null>(null);
 const nextPost = ref<Post | null>(null);
 const body = ref<string | null>(null);
+
+router.beforeEach((to, from, next) => {
+  // If navigating away from Details page, kill ScrollTrigger instances
+  if (from.name === 'Details') {
+    showTransitionAnimation.value = true;
+  }
+  next();
+});
 
 let timeline: gsap.core.Timeline
 
@@ -108,11 +118,81 @@ function loadAnimations() {
 }
 
 function loadTransitionAnimations() {
-  // hide gallery
-  // hide all other text
-  gsap.to('.project__content', {
+  const contentToReveal = ['.project__gallery', '.back-button', '.project__content-title-year', '.project__content-body', '.contact-button']
+  gsap.set(contentToReveal, { opacity: 0 })
 
+  mm.add(
+    {
+      // A unique name for the context, useful for reverting/debugging
+      isThousand: '(min-width: 1000px)',
+      isPortrait: '(max-aspect-ratio: 1/1)',
+    },
+    (context) => {
+      let { isThousand } = context.conditions as {
+        isThousand: boolean;
+        isPortrait: boolean;
+      };
+
+      if (isThousand) {
+        gsap.from(['.full-circle'], {
+          width: '200dvw',
+          height: '200dvh',
+          ease: 'sine.inOut',
+          zIndex: 10,
+        })
+      } else {
+        gsap.from(['.full-circle'], {
+          width: '200dvw',
+          height: '200dvh',
+          top: '-10%',
+          left: '-50%',
+          ease: 'sine.inOut',
+          zIndex: 10,
+        })
+      }
+    })
+
+  gsap.from('.project__content-title>h2', {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 20,
+    ease: 'sine.inOut',
+    fontWeight: 'bold',
+    fontSize: '6vw',
+    width: '100dvw',
+    height: '100dvh',
+    marginTop: 'calc(var(--spacing-xxxl) * -1)',
   })
+
+  gsap.to(contentToReveal, {
+    opacity: 1,
+    delay: 0.75,
+    ease: 'sine.inOut',
+  })
+}
+
+function toggleScrollable() {
+  document.body.classList.toggle('not-scrollable');
+}
+
+function handleHeaderColor(color: PageColors, colorLinks: boolean = true) {
+  const links = document.querySelector('header')?.querySelectorAll('.nav-link');
+  if (!links) return;
+
+  if (colorLinks) {
+    links.forEach(link => {
+      link.classList.remove('yellow', 'brown', 'green', 'dark-brown', 'white');
+      link.classList.add(color);
+    });
+  } else {
+    links.forEach(link => {
+      link.classList.remove('yellow', 'brown', 'green', 'dark-brown', 'white');
+    });
+  }
+
+
+  console.log(links)
 }
 
 watch(
@@ -125,10 +205,16 @@ watch(
     }
     if (currentSlug) {
       try {
+        toggleScrollable()
+
         // Fetch the post details using the slug
         post.value = await getPostBySlug(currentSlug as unknown as Post['slug']);
 
-        if (!post.value) router.back();
+        if (!post.value) {
+          toggleScrollable();
+          await router.back();
+          return;
+        };
 
         console.log(post.value)
 
@@ -138,13 +224,21 @@ watch(
         nextPost.value = await getNextPostBySlug(currentSlug as unknown as Post['slug'])
         handleColors(nextPost.value?.colorScheme, nextPostColors)
 
-        loadTransitionAnimations();
+        handleHeaderColor(colors.value.circle);
 
-        nextTick(() => {
-          setTimeout(() => {
+        if (showTransitionAnimation.value) {
+          loadTransitionAnimations();
+        } else {
+          toggleScrollable()
+        }
+
+        setTimeout(() => {
+          if (showTransitionAnimation.value) toggleScrollable()
+
+          nextTick(() => {
             loadAnimations();
-          }, 300)
-        })
+          })
+        }, 1000);
       } catch (error) {
         console.error("Error fetching post details:", error);
       }
@@ -159,14 +253,7 @@ async function handleScroll() {
   const isAtBottom = scrollTop === document.documentElement.scrollHeight - window.innerHeight;
 
   if (isAtBottom) {
-    console.log('go to page')
-    // Kill all ScrollTriggers
-    ScrollTrigger.killAll();
-
-    setTimeout(async () => {
-      await router.push({ name: 'Details', params: { slug: nextPost.value?.slug?.current } })
-    }, 500)
-
+    await router.push({ name: 'Details', params: { slug: nextPost.value?.slug?.current } })
   }
 }
 
@@ -175,6 +262,7 @@ onMounted(() => {
 });
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
+  handleHeaderColor('white', false);
 });
 </script>
 <template>
@@ -186,10 +274,10 @@ onUnmounted(() => {
       </p>
       <div class="project__content-title">
         <h2>{{ post.title }}</h2>
-        <p>{{ post.year }}</p>
+        <p class="project__content-title-year">{{ post.year }}</p>
       </div>
-      <div class="" v-html="body"></div>
-      <RouterLink class="contact-button" :to="{ name: 'Contact' }">
+      <div class="project__content-body" v-html="body"></div>
+      <RouterLink :class="['contact-button', colors.circle]" :to="{ name: 'Contact' }">
         {{ post.callToAction }}
       </RouterLink>
     </article>
@@ -210,6 +298,12 @@ onUnmounted(() => {
     <p>{{ nextPost?.title }}</p>
   </section>
 </template>
+<style lang="scss">
+html:has(body.not-scrollable) {
+  overflow: hidden !important;
+}
+</style>
+
 <style lang="scss" scoped>
 .project {
   display: grid;
@@ -274,10 +368,35 @@ onUnmounted(() => {
   >h2 {
     font-size: 8vw;
 
-    @media screen and (min-width: 1000px) {
+    @media screen and (min-width: 600px) {
       font-size: 4.5rem;
+
+      max-width: 95%;
+    }
+
+    @media screen and (min-width: 835px) {
+      max-width: 65%;
+    }
+
+    @media screen and (min-width: 1000px) {
+      max-width: 100%;
     }
   }
+}
+
+.project__content-body {
+  @media screen and (min-width: 650px) {
+    max-width: 90%;
+  }
+
+  @media screen and (min-width: 835px) {
+    max-width: 65%;
+  }
+
+  @media screen and (min-width: 1000px) {
+    max-width: 100%;
+  }
+
 }
 
 .project__gallery {
@@ -341,13 +460,14 @@ onUnmounted(() => {
 }
 
 .full-circle {
-  top: -18rem;
+  top: -2%;
   left: -130dvw;
-  border-radius: 500rem;
+  border-radius: 120dvw;
 
   @media screen and (min-width: 1000px) {
     left: -50%;
     top: -10rem;
+    border-radius: 60dvw;
   }
 
   &.green {
@@ -369,7 +489,7 @@ onUnmounted(() => {
 
 .full-square {
   transform-origin: unset;
-  top: 240dvw;
+  top: 270dvw;
   left: -20%;
   transform: rotate(45deg);
 
@@ -392,7 +512,7 @@ onUnmounted(() => {
   @media screen and (min-width: 1000px) {
     border-width: calc(110dvh/6);
     left: 60%;
-    top: 150dvh;
+    top: 180dvh;
   }
 }
 
@@ -428,6 +548,42 @@ onUnmounted(() => {
   &.dark-brown {
     background-color: var(--main-darkest);
     color: var(--main-light);
+  }
+}
+
+.contact-button {
+  display: inline-block;
+  padding: var(--spacing-s) var(--spacing-xl);
+
+  width: max-content;
+  border-radius: 50rem;
+
+  font-weight: bold;
+  text-decoration: none;
+
+  background-color: var(--main-lightest);
+  cursor: pointer;
+
+  transition: transform 0.75s cubic-bezier(1, -0.3, 0.1, 1);
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &.yellow {
+    color: var(--main-darkest);
+  }
+
+  &.green {
+    color: var(--main-dark);
+  }
+
+  &.brown {
+    color: var(--main);
+  }
+
+  &.dark-brown {
+    color: var(--main-darkest);
   }
 }
 </style>

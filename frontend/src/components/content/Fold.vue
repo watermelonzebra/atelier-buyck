@@ -27,7 +27,7 @@ onMounted(async () => {
                         scrollTrigger: {
                             trigger: '.fold',
                             start: 'top top',
-                            end: '+=50% top',
+                            end: '+=75% top',
                             scrub: true,
                             pin: true,
                         }
@@ -49,11 +49,10 @@ onMounted(async () => {
                         }, 0)
                     foldTimeline.to('.fold__firmname',
                         {
-                            ease: 'none',
+                            ease: 'expo.inOut',
                             scale: 80,
                             color: 'var(--main-darkest)',
-                            duration: 2,
-                        }, 1)
+                        }, '>0.1')
 
                 });
             }

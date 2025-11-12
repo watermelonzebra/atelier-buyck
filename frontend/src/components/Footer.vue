@@ -42,10 +42,10 @@
               <RouterLink class="nav-link" :to="{ name: 'Index' }">
                 <p>Home</p>
               </RouterLink>
-              <RouterLink class="nav-link" :to="{ name: 'Index', hash: '#projects' }">
+              <RouterLink class="nav-link" :to="{ name: 'Projects' }">
                 <p>Onze Projecten</p>
               </RouterLink>
-              <RouterLink class="nav-link -accent" :to="{ name: 'Index', hash: '#contact' }">
+              <RouterLink class="nav-link -accent" :to="{ name: 'Contact' }">
                 <p>Contact</p>
               </RouterLink>
             </nav>

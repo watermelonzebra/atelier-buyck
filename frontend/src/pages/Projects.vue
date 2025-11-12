@@ -37,10 +37,6 @@ const { posts } = usePosts()
     justify-content: center;
     align-items: center;
 
-    >* {
-        transition: all 0.75s cubic-bezier(1, -0.3, 0.1, 1);
-    }
-
     >h2 {
         max-width: 140rem;
         font-size: 5vw;

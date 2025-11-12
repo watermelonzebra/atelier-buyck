@@ -109,6 +109,14 @@ onUnmounted(() => {
   </header>
 </template>
 
+<style lang="scss">
+/* Pure CSS: Prevent scrolling when nav is open */
+html:has(.nav-toggle:checked) {
+  overflow: hidden !important;
+  height: 100dvh;
+}
+</style>
+
 <style scoped lang="scss">
 header {
   padding: var(--spacing-xl);
@@ -197,11 +205,12 @@ input.nav-toggle {
 
   transform: translateX(-100%);
 
-  transition: all .5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  transition: all .5s cubic-bezier(0.18, 0.89, 0.32, 1);
 
   @media screen and (min-width: 600px) {
     width: 100%;
     background-color: transparent;
+    overflow: visible;
   }
 }
 
@@ -241,6 +250,7 @@ input.nav-toggle {
 }
 
 @media screen and (min-width: 600px) {
+
 
   input.nav-toggle,
   label.nav-toggle-label {
@@ -282,6 +292,8 @@ input.nav-toggle {
 
 // #endregion
 
+
+
 .nav-link:not(.nav-link.-accent) {
   font-weight: bold;
   font-size: var(--font-size-p);
@@ -300,8 +312,14 @@ input.nav-toggle {
     // color: var(--main);
     transform: scale(1.05);
   }
+}
 
-  @media screen and (min-width: 600px) {}
+@media screen and (min-width: 600px) {
+  .nav-link:not(.nav-link.-accent) {
+    &.dark-brown {
+      color: var(--main);
+    }
+  }
 }
 
 .nav-link.-accent {
@@ -312,8 +330,20 @@ input.nav-toggle {
   text-decoration: none;
   color: var(--main-darkest);
   display: flex;
+  position: relative;
+
+  transform-origin: left center;
+
+  transition: all .5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+
+  &:hover {
+    // color: var(--main);
+    transform: scale(1.05);
+  }
 
   & .circle-element {
+    display: none;
+
     transition: transform .5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
     content: '';
 
@@ -341,7 +371,14 @@ input.nav-toggle {
   @media screen and (min-width: 600px) {
     color: var(--white);
 
+    & .circle-element {
+      display: inline-block;
+    }
+
     &:hover {
+
+      transform: unset;
+
       >div {
         transform: scale(1.1)
       }
