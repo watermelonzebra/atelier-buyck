@@ -85,9 +85,15 @@
           </p>
         </div>
         <div class="footer-section__policies">
-          <p>cookie policy</p>
-          <p>Legal Notice & Terms of Use</p>
-          <p>Privacy policy</p>
+          <p>
+            <RouterLink :to="{ name: 'CookiePolicy' }">Cookie Policy</RouterLink>
+          </p>
+          <p>
+            <RouterLink :to="{ name: 'LegalNoticeTermsOfUse' }">Legal Notice & Terms of Use</RouterLink>
+          </p>
+          <p>
+            <RouterLink :to="{ name: 'PrivacyPolicy' }">Privacy policy</RouterLink>
+          </p>
         </div>
       </div>
     </div>
@@ -246,5 +252,16 @@ footer {
   flex-flow: row wrap;
 
   gap: var(--spacing-s);
+
+  a {
+    user-select: none;
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 </style>

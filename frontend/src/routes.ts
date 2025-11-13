@@ -12,6 +12,27 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("./pages/Index.vue"),
   },
   {
+    path: "/privacy-policy",
+    name: "PrivacyPolicy",
+    component: () => import("./pages/PrivacyPolicy.vue"),
+  },
+  {
+    path: "/cookie-policy",
+    name: "CookiePolicy",
+    component: () => import("./pages/CookiePolicy.vue"),
+  },
+  {
+    path: "/legal-notice-terms-of-use",
+    name: "LegalNoticeTermsOfUse",
+    component: () => import("./pages/Legal.vue"),
+  },
+  {
+    path: "/privacy-policy",
+    name: "PrivacyPolicy",
+    component: () => import("./pages/PrivacyPolicy.vue"),
+  },
+
+  {
     path: "/projects/:slug",
     name: "Details",
     component: () => import("./pages/Details.vue"),

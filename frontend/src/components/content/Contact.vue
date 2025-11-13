@@ -1,4 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { RouterLink } from 'vue-router';
+
+</script>
 <template>
     <article class="contact" id="contact">
         <div class="contact__wrapper">
@@ -37,6 +40,10 @@
                         <span>Uw project bespreken</span>
                     </button>
                 </div>
+                <p>By submitting this form, you agree that we may use your information to contact you regarding your
+                    inquiry, as described in our
+                    <RouterLink :to="{ name: 'PrivacyPolicy' }">Privacy Policy</RouterLink>
+                </p>
             </form>
             <div id="circle-stroke">
             </div>
@@ -184,14 +191,14 @@ textarea {
 
     transition: all 0.75s cubic-bezier(1, -0.3, 0.1, 1);
 
-    > span {
+    >span {
         transition: font-size 0.75s cubic-bezier(1, -0.3, 0.1, 1);
     }
 
     &:hover {
         transform: scale(1.2);
 
-        > span {
+        >span {
             font-size: 1.35rem;
         }
     }
