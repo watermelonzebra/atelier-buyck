@@ -7,6 +7,7 @@ import { onBeforeMount } from "vue";
 const route = useRoute();
 
 import { usePosts } from "./composables/usePosts";
+import CookieBanner from "./components/CookieBanner.vue";
 
 const { getAllPosts } = usePosts()
 
@@ -25,6 +26,7 @@ onBeforeMount(() => {
         <div>Loading...</div>
       </template>
     </Suspense>
+    <CookieBanner />
   </main>
   <Footer v-if="route.name !== 'Details'"></Footer>
 </template>

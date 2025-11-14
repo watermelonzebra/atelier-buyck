@@ -22,11 +22,33 @@
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KQ91K86Y0"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+    window.onload = function () {
+      const loadCookies = localStorage.getItem('cookie-consent');
 
-    gtag('config', 'G-6KQ91K86Y0');
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+
+      gtag('config', 'G-6KQ91K86Y0');
+      
+      gtag('allow_google_signals', 'update', {
+        'google_signals': false
+      });
+      gtag('allow_ad_personalization_signals', 'update', {
+        'ad_personalization_signals': false
+      });
+      gtag('set', 'restricted_data_processing', true);
+
+      if (loadCookies === 'accepted') {
+        gtag('consent', 'update', {
+          'analytics_storage': 'granted'
+        });
+      } else {
+        gtag('consent', 'update', {
+          'analytics_storage': 'denied'
+        });
+      }
+    }
   </script>
 </head>
 

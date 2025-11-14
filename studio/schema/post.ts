@@ -74,7 +74,12 @@ export const post = defineType({
       type: 'string',
       initialValue: 'Vraag uw offerte aan',
       validation: (Rule) => Rule.required()
-    })
+    }),
+    defineField({
+      title: "Seo",
+      name: "seo",
+      type: "seoMetaFields",
+    }),
   ],
   preview: {
     select: {

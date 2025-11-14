@@ -23,29 +23,34 @@
             <p>We use cookies for the following purposes:</p>
             <div class="table-container">
                 <table>
-                    <tr>
-                        <th>Category</th>
-                        <th>Purpose</th>
-                        <th>Type</th>
-                        <th>Third-Party Access</th>
-                    </tr>
-                    <tr>
-                        <td>Strictly Necessary</td>
-                        <td>Essential for navigating the site and using its features (e.g., remembering your cookie
-                            preference).
-                        </td>
-                        <td>First-Party, Session/Persistent</td>
-                        <td>No</td>
-                    </tr>
-                    <tr>
-                        <td>Analytics/Performance</td>
-                        <td>To analyze how visitors use our website and monitor its performance. This helps us improve
-                            the
-                            user
-                            experience.</td>
-                        <td>Third-Party (Google Analytics)</td>
-                        <td>Yes (Google)</td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Purpose</th>
+                            <th>Type</th>
+                            <th>Third-Party Access</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Strictly Necessary</td>
+                            <td>Essential for navigating the site and using its features (e.g., remembering your cookie
+                                preference).
+                            </td>
+                            <td>First-Party, Session/Persistent</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>Analytics/Performance</td>
+                            <td>To analyze how visitors use our website and monitor its performance. This helps us
+                                improve
+                                the
+                                user
+                                experience.</td>
+                            <td>Third-Party (Google Analytics)</td>
+                            <td>Yes (Google)</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </article>
@@ -103,9 +108,6 @@
                         </li>
                         <li>
                             <p><strong>Reject All</strong> (except strictly necessary cookies)</p>
-                        </li>
-                        <li>
-                            <p><strong>Manage Preferences</strong> (to selectively enable/disable Analytics)</p>
                         </li>
                     </ul>
                 </li>

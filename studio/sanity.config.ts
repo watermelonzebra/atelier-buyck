@@ -5,6 +5,7 @@ import { media } from 'sanity-plugin-media'
 
 import { schemaTypes } from './schema/index'
 import { deskStructure } from './DeskStructure'
+import { seoMetaFields } from 'sanity-plugin-seo'
 
 export default defineConfig({
   name: process.env.SANITY_STUDIO_PROJECT_NAME,
@@ -26,6 +27,7 @@ export default defineConfig({
       },
     }),
     media(),
+    seoMetaFields(),
   ],
 
   schema: {

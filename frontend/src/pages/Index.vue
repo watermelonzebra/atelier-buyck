@@ -1,9 +1,21 @@
 <script setup lang="ts">
+import { useHead } from "@vueuse/head";
 import Contact from "../components/content/Contact.vue";
 import Fold from "../components/content/Fold.vue";
 import { defineAsyncComponent } from "vue";
 
 const asyncPosts = defineAsyncComponent(() => import("../components/content/Posts.vue"))
+
+useHead({
+  title: "Atelier Buyck | Maatwerk Interieur Project Starten? Vraag Advies in Izegem.",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Ontdek hoe Sander Buyck u kan helpen bij het starten van uw maatwerk interieur project in Izegem. Vraag vandaag nog advies aan onze experts.",
+    },
+  ],
+});
 </script>
 <template>
   <section>

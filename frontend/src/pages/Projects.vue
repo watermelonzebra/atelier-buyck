@@ -1,8 +1,19 @@
 <script setup lang="ts">
+import { useHead } from '@vueuse/head';
 import { usePosts } from '../composables/usePosts';
 import { getSanityImageSrcSet, getSanityImageUrl, sizes } from "../helpers/sanity-image.helper";
 
-const { posts } = usePosts()
+const { posts } = usePosts();
+
+useHead({
+    title: 'Onze Projecten - Maatwerk Interieur door Sander Buyck',
+    meta: [
+        {
+            name: 'description',
+            content: 'Bekijk onze recente projecten en ontdek het vakmanschap van Sander Buyck in maatwerk interieur en schrijnwerk.',
+        },
+    ],
+})
 </script>
 <template>
     <section class="projects">
