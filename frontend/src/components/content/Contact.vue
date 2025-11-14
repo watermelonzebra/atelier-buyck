@@ -12,6 +12,12 @@ import { RouterLink } from 'vue-router';
             </div>
             <form action="submitForm" class="contact__form">
                 <div class="contact__form-row">
+                    <label for="website">
+                        <input id="website" type="text" name="website" placeholder="Uw website">
+                        <span>website</span>
+                    </label>
+                </div>
+                <div class="contact__form-row">
                     <label for="first_name">
                         <input id="first_name" type="text" name="first_name" placeholder="Voornaam" required>
                         <span>Voornaam</span>
