@@ -4,62 +4,76 @@ import {
   createWebHistory,
   type RouteRecordRaw,
 } from "vue-router";
+import { usePosts } from "./composables/usePosts";
+
+const Index = () => import("./pages/Index.vue");
+const PrivacyPolicy = () => import("./pages/PrivacyPolicy.vue");
+const CookiePolicy = () => import("./pages/CookiePolicy.vue");
+const Legal = () => import("./pages/Legal.vue");
+const Details = () => import("./pages/Details.vue");
+const Projects = () => import("./pages/Projects.vue");
+const Contact = () => import("./pages/Contact.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Index",
-    component: () => import("./pages/Index.vue"),
+    component: Index,
   },
   {
     path: "/privacy-policy",
     name: "PrivacyPolicy",
-    component: () => import("./pages/PrivacyPolicy.vue"),
+    component: PrivacyPolicy,
   },
   {
     path: "/cookie-policy",
     name: "CookiePolicy",
-    component: () => import("./pages/CookiePolicy.vue"),
+    component: CookiePolicy,
   },
   {
     path: "/legal-notice-terms-of-use",
     name: "LegalNoticeTermsOfUse",
-    component: () => import("./pages/Legal.vue"),
+    component: Legal,
   },
   {
     path: "/privacy-policy",
     name: "PrivacyPolicy",
-    component: () => import("./pages/PrivacyPolicy.vue"),
+    component: PrivacyPolicy,
   },
 
   {
     path: "/projects/:slug",
     name: "Details",
-    component: () => import("./pages/Details.vue"),
+    component: Details,
     props: true,
   },
   {
     path: "/projects",
-    name: 'Projects',
-    component: () => import("./pages/Projects.vue"),
+    name: "Projects",
+    component: Projects,
   },
   {
     path: "/contact",
     name: "Contact",
-    component: () => import("./pages/Contact.vue")
-  }
+    component: Contact,
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior: async (_to, _from, _savedPosition) => {
-    return { left: 0, top: 0, behavior: 'instant' };
+    return { left: 0, top: 0, behavior: "instant" };
   },
 });
 
-router.beforeEach(() => {
-  ScrollTrigger.getAll().forEach((st) => st.kill())
-})
+router.beforeEach(async (to) => {
+  const pagesToFetchPosts = ["Index", "Projects", "Details"];
+  if (pagesToFetchPosts.includes(to.name as string)) {
+    const { getAllPosts } = usePosts();
+    await getAllPosts();
+  }
+  ScrollTrigger.getAll().forEach((st) => st.kill());
+});
 
 export default router;

@@ -1,60 +1,76 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atelier Buyck</title>
+    <link
+      rel="sitemap"
+      type="application/xml"
+      title="Sitemap"
+      href="/sitemap.xml"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atelier Buyck</title>
-  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <!-- Load google font Raleway -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Load google font Raleway -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+    <!-- SEO -->
+    <meta
+      name="title"
+      content="Schrijnwerk op Maat Izegem | Exclusieve Interieurs - Atelier Buyck"
+    />
+    <meta
+      name="description"
+      content="...gedreven door detail en vakmanschap...	Wij ontwerpen en realiseren uw maatwerk interieur, van kastenwanden tot keukens op maat in de regio Izegem. Vraag nu uw vrijblijvende offerte aan!"
+    />
 
-  <!-- SEO -->
-  <meta name="title" content="Schrijnwerk op Maat Izegem | Exclusieve Interieurs - Atelier Buyck" />
-  <meta name="description"
-    content="...gedreven door detail en vakmanschap...	Wij ontwerpen en realiseren uw maatwerk interieur, van kastenwanden tot keukens op maat in de regio Izegem. Vraag nu uw vrijblijvende offerte aan!" />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      rel="preconnect"
+      src="https://www.googletagmanager.com/gtag/js?id=G-6KQ91K86Y0"
+    ></script>
+    <script async>
+      window.onload = function () {
+        const loadCookies = localStorage.getItem("cookie-consent");
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KQ91K86Y0"></script>
-  <script>
-    window.onload = function () {
-      const loadCookies = localStorage.getItem('cookie-consent');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
 
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
+        gtag("config", "G-6KQ91K86Y0");
 
-      gtag('config', 'G-6KQ91K86Y0');
-      
-      gtag('allow_google_signals', 'update', {
-        'google_signals': false
-      });
-      gtag('allow_ad_personalization_signals', 'update', {
-        'ad_personalization_signals': false
-      });
-      gtag('set', 'restricted_data_processing', true);
-
-      if (loadCookies === 'accepted') {
-        gtag('consent', 'update', {
-          'analytics_storage': 'granted'
+        gtag("allow_google_signals", "update", {
+          google_signals: false,
         });
-      } else {
-        gtag('consent', 'update', {
-          'analytics_storage': 'denied'
+        gtag("allow_ad_personalization_signals", "update", {
+          ad_personalization_signals: false,
         });
-      }
-    }
-  </script>
-</head>
+        gtag("set", "restricted_data_processing", true);
 
-<body>
-  <div id="app"></div>
-  <script type="module" src="/src/main.ts"></script>
-</body>
+        if (loadCookies === "accepted") {
+          gtag("consent", "update", {
+            analytics_storage: "granted",
+          });
+        } else {
+          gtag("consent", "update", {
+            analytics_storage: "denied",
+          });
+        }
+      };
+    </script>
+  </head>
 
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>

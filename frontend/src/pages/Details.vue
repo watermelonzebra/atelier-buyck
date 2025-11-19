@@ -105,7 +105,6 @@ function handleColors(color: Post["colorScheme"], ref: Ref<Colors>) {
 
 const nextPostContainer = ref<HTMLElement | null>(null);
 function loadAnimations() {
-  console.log(nextPostContainer.value);
   if (!nextPostContainer.value) return;
 
   gsap.set(nextPostContainer.value, { yPercent: -50 });
@@ -203,8 +202,6 @@ function handleHeaderColor(color: PageColors, colorLinks: boolean = true) {
       link.classList.remove("yellow", "brown", "green", "dark-brown", "white");
     });
   }
-
-  console.log(links);
 }
 
 watch(
@@ -284,18 +281,7 @@ async function handleScroll() {
   const isAtBottom =
     scrollTop >= document.documentElement.scrollHeight - window.innerHeight;
 
-  console.log("ScrollTop:", scrollTop);
-  console.log(
-    "Height:",
-    document.documentElement.scrollHeight - window.innerHeight
-  );
-  console.log("Is at bottom:", isAtBottom);
-
   if (isAtBottom) {
-    console.log(
-      "At bottom of page, navigating to next post:",
-      nextPost.value?.slug?.current
-    );
     await router.push({
       name: "Details",
       params: { slug: nextPost.value?.slug?.current },
@@ -338,6 +324,7 @@ onUnmounted(() => {
         :sizes
         :alt="post.contentImage?.alt || post.title"
         width="500"
+        lazy
       />
       <img
         v-for="image in post.imageGallery"
@@ -347,6 +334,7 @@ onUnmounted(() => {
         :sizes
         :alt="image?.alt || post.title"
         width="500"
+        lazy
       />
       <div class="project__gallery-action">
         <p>blijf scrollen voor het volgende project</p>

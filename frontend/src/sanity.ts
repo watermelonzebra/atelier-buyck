@@ -8,6 +8,8 @@ import { POST_QUERY, postInterface } from "./utils/groq-queries";
 export const client = createClient({
   projectId: import.meta.env.VITE_SANITY_PROJECT_ID || "your-project-id",
   dataset: import.meta.env.VITE_SANITY_DATASET || "production",
+  apiVersion: "2024-06-01", // use current UTC date - see "specifying API version"!
+  useCdn: true, // `false` if you want to ensure fresh data
 });
 
 // uses GROQ to query content: https://www.sanity.io/docs/groq

@@ -45,7 +45,6 @@ function handleScroll() {
     if (isMobileViewport.value) {
       // Apply the special class only on mobile when scrolled
       header.value.classList.remove("no-overflow");
-      console.log('Added no-overflow on mobile.');
     } else {
       // Ensure the class is removed if the user scrolls on a desktop view
       header.value.classList.add("no-overflow");

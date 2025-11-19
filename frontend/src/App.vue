@@ -10,15 +10,8 @@ const route = useRoute();
 <template>
   <Header></Header>
   <main>
-    <Suspense>
-      
-        <RouterView />
-     
+    <RouterView />
 
-      <template #fallback>
-        <div>Loading...</div>
-      </template>
-    </Suspense>
     <CookieBanner />
   </main>
   <Footer v-if="route.name !== 'Details'"></Footer>

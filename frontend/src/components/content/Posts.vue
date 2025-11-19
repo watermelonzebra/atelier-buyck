@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted } from "vue";
-import { getSanityImageUrl, sizes, getSanityImageSrcSet } from "../../helpers/sanity-image.helper";
+import { computed, nextTick, onMounted } from "vue";
+import {
+  getSanityImageUrl,
+  sizes,
+  getSanityImageSrcSet,
+} from "../../helpers/sanity-image.helper";
 import { RouterLink } from "vue-router";
 import gsap from "gsap";
 import { usePosts } from "../../composables/usePosts";
 
-const { posts, getAllPosts } = usePosts();
+const { posts } = usePosts();
 const clampedPosts = computed(() => posts.value?.slice(0, 3));
-const postsAmount = computed(() => clampedPosts.value?.length || 0)
+const postsAmount = computed(() => clampedPosts.value?.length || 0);
 
 let projectsTimeline: gsap.core.Timeline;
 
-async function loadGsapPostAnimations(timeline: gsap.core.Timeline, mm: gsap.MatchMedia) {
-
+async function loadGsapPostAnimations(
+  timeline: gsap.core.Timeline,
+  mm: gsap.MatchMedia
+) {
   const postElements = gsap.utils.toArray<HTMLElement>(".projects__posts-item");
 
   // Set initial state and Z-index
@@ -21,24 +27,27 @@ async function loadGsapPostAnimations(timeline: gsap.core.Timeline, mm: gsap.Mat
   gsap.set(postElements, { scale: 0, zIndex: (i) => postsAmount.value + i });
 
   postElements.forEach((post, i) => {
-    timeline.to(post, {
-      scale: 1,
-      ease: "power4.inOut",
-      duration: 0.4
-    }, i)
+    timeline.to(
+      post,
+      {
+        scale: 1,
+        ease: "power4.inOut",
+        duration: 0.4,
+      },
+      i
+    );
 
-
-    const postContent = post.querySelector('.projects__posts-item__content')
+    const postContent = post.querySelector(".projects__posts-item__content");
 
     gsap.set(postContent, {
-      translateX: '-50%',
-      translateY: '-50%',
+      translateX: "-50%",
+      translateY: "-50%",
     });
     mm.add(
       {
         // A unique name for the context, useful for reverting/debugging
-        isLandscape: '(min-aspect-ratio: 1/1)',
-        isPortrait: '(max-aspect-ratio: 1/1)',
+        isLandscape: "(min-aspect-ratio: 1/1)",
+        isPortrait: "(max-aspect-ratio: 1/1)",
       },
       (context) => {
         let { isLandscape } = context.conditions as {
@@ -46,30 +55,32 @@ async function loadGsapPostAnimations(timeline: gsap.core.Timeline, mm: gsap.Mat
           isPortrait: boolean;
         };
 
-        const largestSide = isLandscape ? '100dvw' : '100dvh';
+        const largestSide = isLandscape ? "100dvw" : "100dvh";
 
         // 2. Scale it up and set duration
         timeline?.to(postContent, {
           scale: 1.5,
-          translateX: '-50%',
-          translateY: '-50%',
+          translateX: "-50%",
+          translateY: "-50%",
           ease: "power4.inOut",
           width: largestSide,
           height: largestSide,
-          duration: 0.3
+          duration: 0.3,
         });
+      }
+    );
 
-      })
-
-    const postContentContainer = post.querySelector('.projects__posts-item__content-container')
-    gsap.set(postContentContainer, { opacity: 0, y: 200 })
+    const postContentContainer = post.querySelector(
+      ".projects__posts-item__content-container"
+    );
+    gsap.set(postContentContainer, { opacity: 0, y: 200 });
     timeline?.to(postContentContainer, {
       opacity: 1,
       y: 100,
       ease: "none",
       duration: 0.2,
     });
-  })
+  });
 }
 
 async function loadGsapAnimations() {
@@ -79,7 +90,8 @@ async function loadGsapAnimations() {
       // A unique name for the context, useful for reverting/debugging
       isDesktop: "(min-width: 1000px)",
       isMobile: "(max-width: 999px)",
-    }, (context) => {
+    },
+    (context) => {
       let { isDesktop } = context.conditions as {
         isDesktop: boolean;
         isMobile: boolean;
@@ -87,28 +99,27 @@ async function loadGsapAnimations() {
 
       projectsTimeline = gsap.timeline({
         scrollTrigger: {
-          trigger: '.projects',
-          start: `${isDesktop ? '+=75% top' : 'top top'}`,
-          end: `+=${(100 * postsAmount.value) + (isDesktop ? 50 : 0)}%`,
+          trigger: ".projects",
+          start: `${isDesktop ? "+=75% top" : "top top"}`,
+          end: `+=${100 * postsAmount.value + (isDesktop ? 50 : 0)}%`,
           pin: true,
           pinReparent: true,
           scrub: true,
         },
-      })
+      });
 
       tl.add(projectsTimeline);
 
-      loadGsapPostAnimations(projectsTimeline, mm)
+      loadGsapPostAnimations(projectsTimeline, mm);
     }
-  )
+  );
 }
 
 onMounted(async () => {
   try {
-    if (!posts.value?.length) await getAllPosts()
     await nextTick(async () => {
       await loadGsapAnimations();
-    })
+    });
   } catch (error) {
     console.error("Error fetching posts:", error);
   }
@@ -118,19 +129,37 @@ onMounted(async () => {
   <article class="projects" id="projects">
     <h2 class="projects__title">Ontdek Ons Schrijnwerk & Maatwerk</h2>
     <ul class="projects__posts">
-      <li v-for="(post, index) in clampedPosts" :key="post._id"
-        :class="['projects__posts-item', index % 2 === 0 ? 'left' : 'right']">
-        <RouterLink :to="{ name: 'Details', params: { slug: post.slug?.current } }">
-          <img :src="getSanityImageUrl(post.contentImage)" :srcset="getSanityImageSrcSet(post.contentImage)" :sizes
-            alt="Post Image" class="projects__posts-item-cover" />
-          <div :class="['projects__posts-item__content-container', post.colorScheme]">
+      <li
+        v-for="(post, index) in clampedPosts"
+        :key="post._id"
+        :class="['projects__posts-item', index % 2 === 0 ? 'left' : 'right']"
+      >
+        <RouterLink
+          :to="{ name: 'Details', params: { slug: post.slug?.current } }"
+        >
+          <img
+            :src="getSanityImageUrl(post.contentImage)"
+            :srcset="getSanityImageSrcSet(post.contentImage)"
+            :sizes
+            alt="Post Image"
+            class="projects__posts-item-cover"
+            lazy
+            fetchpriority="low"
+          />
+          <div
+            :class="[
+              'projects__posts-item__content-container',
+              post.colorScheme,
+            ]"
+          >
             <h3 class="projects__posts-item__content-title">
               {{ post.title }}
             </h3>
             <p class="text-small">Klik om het project te bekijken</p>
           </div>
-          <div :class="['projects__posts-item__content', post.colorScheme]">
-          </div>
+          <div
+            :class="['projects__posts-item__content', post.colorScheme]"
+          ></div>
         </RouterLink>
       </li>
     </ul>
@@ -223,7 +252,7 @@ onMounted(async () => {
 
   &.dark-brown {
     background-color: var(--main-darkest);
-    color: var(--main-light)
+    color: var(--main-light);
   }
 
   &.brown {
@@ -250,11 +279,10 @@ onMounted(async () => {
   right: 0;
   z-index: 2;
 
-
   padding: var(--spacing-xxxl) var(--spacing-xl);
 
   &.dark-brown {
-    color: var(--main-light)
+    color: var(--main-light);
   }
 
   &.brown {
@@ -269,13 +297,12 @@ onMounted(async () => {
     color: var(--main-lightest);
   }
 
-  >p {
+  > p {
     font-size: var(--font-size-p);
   }
 
   @media screen and (min-width: 500px) {
-
-    >h3 {
+    > h3 {
       font-size: 3vw !important;
       line-height: 1.6;
     }

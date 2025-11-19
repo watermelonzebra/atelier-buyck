@@ -3,7 +3,6 @@ import { createHead } from "@vueuse/head";
 import "./assets/scss/index.scss";
 import "remixicon/fonts/remixicon.css";
 import App from "./App.vue";
-import { usePosts } from "./composables/usePosts";
 
 // Import the router
 import router from "./routes";
@@ -13,9 +12,6 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollToPlugin);
 gsap.registerPlugin(ScrollTrigger);
-
-const { getAllPosts } = usePosts();
-getAllPosts();
 
 const app = createApp(App);
 const head = createHead({

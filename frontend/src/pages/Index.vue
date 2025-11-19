@@ -2,9 +2,7 @@
 import { useHead } from "@vueuse/head";
 import Contact from "../components/content/Contact.vue";
 import Fold from "../components/content/Fold.vue";
-import { defineAsyncComponent } from "vue";
-
-const asyncPosts = defineAsyncComponent(() => import("../components/content/Posts.vue"))
+import Posts from "../components/content/Posts.vue";
 
 useHead({
   title: "Home",
@@ -25,12 +23,7 @@ useHead({
   <section>
     <h1 class="visually-hidden">Maatwerk Interieur Project Starten? Vraag Advies in Izegem.</h1>
     <Fold></Fold>
-    <Suspense>
-      <asyncPosts />
-      <template #fallback>
-        <div>Loading...</div>
-      </template>
-    </Suspense>
+    <Posts></Posts>
     <Contact></Contact>
   </section>
 </template>
