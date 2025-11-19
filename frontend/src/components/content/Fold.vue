@@ -50,7 +50,7 @@ onMounted(async () => {
                     foldTimeline.to('.fold__firmname',
                         {
                             ease: 'expo.inOut',
-                            scale: 80,
+                            scale: 85,
                             color: 'var(--main-darkest)',
                         }, '>0.1')
 

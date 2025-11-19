@@ -7,8 +7,12 @@ import { defineAsyncComponent } from "vue";
 const asyncPosts = defineAsyncComponent(() => import("../components/content/Posts.vue"))
 
 useHead({
-  title: "Atelier Buyck | Maatwerk Interieur Project Starten? Vraag Advies in Izegem.",
+  title: "Home",
   meta: [
+    {
+      name: "title",
+      content: "Atelier Buyck | Maatwerk Interieur Project Starten? Vraag Advies in Izegem.",
+    },
     {
       name: "description",
       content:

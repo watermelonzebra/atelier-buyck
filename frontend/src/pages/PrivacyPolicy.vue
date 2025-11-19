@@ -1,4 +1,20 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useHead } from '@vueuse/head';
+
+useHead({
+    title: 'Privacy Policy | Atelier Buyck',
+    meta: [
+        {
+            name: 'title',
+            content: 'Privacy Policy | Atelier Buyck',
+        },
+        {
+            name: 'description',
+            content: 'Lees onze privacyverklaring om te begrijpen hoe Atelier Buyck uw persoonlijke gegevens verzamelt, gebruikt en beschermt in overeenstemming met de AVG.',
+        },
+    ],
+})
+</script>
 <template>
     <section class="privacy-policy">
         <h2>Privacy Policy for Atelier Buyck</h2>

@@ -6,7 +6,7 @@ import { getSanityImageSrcSet, getSanityImageUrl, sizes } from "../helpers/sanit
 const { posts } = usePosts();
 
 useHead({
-    title: 'Onze Projecten - Maatwerk Interieur door Sander Buyck',
+    title: 'Onze Projecten - Atelier Buyck',
     meta: [
         {
             name: 'description',

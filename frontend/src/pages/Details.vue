@@ -2,19 +2,24 @@
 import { useRouteParams } from "@vueuse/router";
 import { useRouter } from "vue-router";
 import { nextTick, onMounted, onUnmounted, ref, watch, type Ref } from "vue";
-import { getSanityImageSrcSet, getSanityImageUrl, sizes } from "../helpers/sanity-image.helper";
+import {
+  getSanityImageSrcSet,
+  getSanityImageUrl,
+  sizes,
+} from "../helpers/sanity-image.helper";
 import { toHTML } from "@portabletext/to-html";
 import type { Post } from "../resources/interfaces/sanity.types";
 import type { TypedObject } from "@sanity/types";
 import { usePosts } from "../composables/usePosts";
-import { gsap, mm } from '../resources/gsap';
+import { gsap, mm } from "../resources/gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useHead } from "@vueuse/head";
 
-type PageColors = 'yellow' | 'brown' | 'green' | 'dark-brown' | 'white';
+type PageColors = "yellow" | "brown" | "green" | "dark-brown" | "white";
 interface Colors {
-  text: PageColors,
-  circle: PageColors,
-  square: PageColors,
+  text: PageColors;
+  circle: PageColors;
+  square: PageColors;
 }
 
 const showTransitionAnimation = ref(false);
@@ -25,107 +30,114 @@ const post = ref<Post | null>(null);
 const nextPost = ref<Post | null>(null);
 const body = ref<string | null>(null);
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((_to, from, next) => {
   // If navigating away from Details page, kill ScrollTrigger instances
-  if (from.name === 'Details') {
+  if (from.name === "Details") {
     showTransitionAnimation.value = true;
   }
   next();
 });
 
-let timeline: gsap.core.Timeline
+let timeline: gsap.core.Timeline;
 
 const { getPostBySlug, getNextPostBySlug } = usePosts();
 
 const colors = ref<Colors>({
-  text: 'white',
-  circle: 'green',
-  square: 'brown',
+  text: "white",
+  circle: "green",
+  square: "brown",
 });
 const nextPostColors = ref<Colors>({
-  text: 'white',
-  circle: 'green',
-  square: 'brown',
+  text: "white",
+  circle: "green",
+  square: "brown",
 });
 
-function handleColors(color: Post['colorScheme'], ref: Ref<Colors>) {
+function handleColors(color: Post["colorScheme"], ref: Ref<Colors>) {
   switch (color) {
-    case 'brown': {
-      ref.value = {
-        text: 'white',
-        circle: 'brown',
-        square: 'green',
-      }
-    }
-      break;
-    case 'green':
+    case "brown":
       {
         ref.value = {
-          text: 'white',
-          circle: 'green',
-          square: 'brown',
-        }
+          text: "white",
+          circle: "brown",
+          square: "green",
+        };
       }
       break;
-    case 'yellow':
+    case "green":
       {
         ref.value = {
-          text: 'dark-brown',
-          circle: 'yellow',
-          square: 'dark-brown',
-        }
+          text: "white",
+          circle: "green",
+          square: "brown",
+        };
       }
       break;
-    case 'dark-brown':
+    case "yellow":
       {
         ref.value = {
-          text: 'yellow',
-          circle: 'dark-brown',
-          square: 'yellow',
-        }
+          text: "dark-brown",
+          circle: "yellow",
+          square: "dark-brown",
+        };
       }
       break;
-    default: {
-      ref.value = {
-        text: 'white',
-        circle: 'brown',
-        square: 'green',
+    case "dark-brown":
+      {
+        ref.value = {
+          text: "yellow",
+          circle: "dark-brown",
+          square: "yellow",
+        };
       }
-    }
+      break;
+    default:
+      {
+        ref.value = {
+          text: "white",
+          circle: "brown",
+          square: "green",
+        };
+      }
       break;
   }
-
 }
 
-const nextPostContainer = ref<HTMLElement | null>(null)
+const nextPostContainer = ref<HTMLElement | null>(null);
 function loadAnimations() {
-  console.log(nextPostContainer.value)
-  if (!nextPostContainer.value) return
+  console.log(nextPostContainer.value);
+  if (!nextPostContainer.value) return;
 
-  gsap.set(nextPostContainer.value, { yPercent: -50 })
+  gsap.set(nextPostContainer.value, { yPercent: -50 });
 
   timeline = gsap.timeline({ paused: true });
-  timeline.to(nextPostContainer.value, { yPercent: 0, ease: 'none' });
+  timeline.to(nextPostContainer.value, { yPercent: 0, ease: "none" });
 
   ScrollTrigger.create({
-    trigger: '.project',
+    trigger: ".project",
     scrub: true,
     start: "bottom bottom",
-    end: '+=100%',
+    end: "+=100%",
     animation: timeline,
     markers: true,
-  })
+  });
 }
 
 function loadTransitionAnimations() {
-  const contentToReveal = ['.project__gallery', '.back-button', '.project__content-title-year', '.project__content-body', '.contact-button']
-  gsap.set(contentToReveal, { opacity: 0 })
+  const contentToReveal = [
+    ".project__gallery",
+    ".back-button",
+    ".project__content-title-year",
+    ".project__content-body",
+    ".contact-button",
+  ];
+  gsap.set(contentToReveal, { opacity: 0 });
 
   mm.add(
     {
       // A unique name for the context, useful for reverting/debugging
-      isThousand: '(min-width: 1000px)',
-      isPortrait: '(max-aspect-ratio: 1/1)',
+      isThousand: "(min-width: 1000px)",
+      isPortrait: "(max-aspect-ratio: 1/1)",
     },
     (context) => {
       let { isThousand } = context.conditions as {
@@ -134,110 +146,129 @@ function loadTransitionAnimations() {
       };
 
       if (isThousand) {
-        gsap.from(['.full-circle'], {
-          width: '200dvw',
-          height: '200dvh',
-          ease: 'sine.inOut',
+        gsap.from([".full-circle"], {
+          width: "200dvw",
+          height: "200dvh",
+          ease: "sine.inOut",
           zIndex: 10,
-        })
+        });
       } else {
-        gsap.from(['.full-circle'], {
-          width: '200dvw',
-          height: '200dvh',
-          top: '-10%',
-          left: '-50%',
-          ease: 'sine.inOut',
+        gsap.from([".full-circle"], {
+          width: "200dvw",
+          height: "200dvh",
+          top: "-10%",
+          left: "-50%",
+          ease: "sine.inOut",
           zIndex: 10,
-        })
+        });
       }
-    })
+    }
+  );
 
-  gsap.from('.project__content-title>h2', {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+  gsap.from(".project__content-title>h2", {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     zIndex: 20,
-    ease: 'sine.inOut',
-    fontWeight: 'bold',
-    fontSize: '6vw',
-    width: '100dvw',
-    height: '100dvh',
-    marginTop: 'calc(var(--spacing-xxxl) * -1)',
-  })
+    ease: "sine.inOut",
+    fontWeight: "bold",
+    fontSize: "6vw",
+    width: "100dvw",
+    height: "100dvh",
+    marginTop: "calc(var(--spacing-xxxl) * -1)",
+  });
 
   gsap.to(contentToReveal, {
     opacity: 1,
     delay: 0.75,
-    ease: 'sine.inOut',
-  })
+    ease: "sine.inOut",
+  });
 }
 
 function toggleScrollable() {
-  document.body.classList.toggle('not-scrollable');
+  document.body.classList.toggle("not-scrollable");
 }
 
 function handleHeaderColor(color: PageColors, colorLinks: boolean = true) {
-  const links = document.querySelector('header')?.querySelectorAll('.nav-link');
+  const links = document.querySelector("header")?.querySelectorAll(".nav-link");
   if (!links) return;
 
   if (colorLinks) {
-    links.forEach(link => {
-      link.classList.remove('yellow', 'brown', 'green', 'dark-brown', 'white');
+    links.forEach((link) => {
+      link.classList.remove("yellow", "brown", "green", "dark-brown", "white");
       link.classList.add(color);
     });
   } else {
-    links.forEach(link => {
-      link.classList.remove('yellow', 'brown', 'green', 'dark-brown', 'white');
+    links.forEach((link) => {
+      link.classList.remove("yellow", "brown", "green", "dark-brown", "white");
     });
   }
 
-
-  console.log(links)
+  console.log(links);
 }
 
 watch(
   slug,
   async (currentSlug, previousSlug) => {
     // check if currentSlug is not an array or undefined
-    if (Array.isArray(currentSlug) || currentSlug === undefined || currentSlug === previousSlug) {
-      console.log('no slug || same slug')
+    if (
+      Array.isArray(currentSlug) ||
+      currentSlug === undefined ||
+      currentSlug === previousSlug
+    ) {
       return router.back();
     }
     if (currentSlug) {
       try {
-        toggleScrollable()
+        toggleScrollable();
 
         // Fetch the post details using the slug
-        post.value = await getPostBySlug(currentSlug as unknown as Post['slug']);
+        post.value = await getPostBySlug(
+          currentSlug as unknown as Post["slug"]
+        );
 
         if (!post.value) {
           toggleScrollable();
           await router.back();
           return;
-        };
+        }
 
-        console.log(post.value)
+        useHead({
+          title: `${post.value.title} - Atelier Buyck`,
+          meta: [
+            {
+              name: "title",
+              content: `${post.value.title} - Atelier Buyck`,
+            },
+            {
+              name: "description",
+              content: `Bekijk het project ${post.value.title} van Atelier Buyck.`,
+            },
+          ],
+        });
 
         body.value = toHTML(post.value?.body as unknown as TypedObject);
-        handleColors(post.value?.colorScheme, colors)
+        handleColors(post.value?.colorScheme, colors);
 
-        nextPost.value = await getNextPostBySlug(currentSlug as unknown as Post['slug'])
-        handleColors(nextPost.value?.colorScheme, nextPostColors)
+        nextPost.value = await getNextPostBySlug(
+          currentSlug as unknown as Post["slug"]
+        );
+        handleColors(nextPost.value?.colorScheme, nextPostColors);
 
         handleHeaderColor(colors.value.circle);
 
         if (showTransitionAnimation.value) {
           loadTransitionAnimations();
         } else {
-          toggleScrollable()
+          toggleScrollable();
         }
 
         setTimeout(() => {
-          if (showTransitionAnimation.value) toggleScrollable()
+          if (showTransitionAnimation.value) toggleScrollable();
 
           nextTick(() => {
             loadAnimations();
-          })
+          });
         }, 1000);
       } catch (error) {
         console.error("Error fetching post details:", error);
@@ -250,10 +281,25 @@ watch(
 async function handleScroll() {
   // 2. Get scroll metrics
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  const isAtBottom = scrollTop === document.documentElement.scrollHeight - window.innerHeight;
+  const isAtBottom =
+    scrollTop >= document.documentElement.scrollHeight - window.innerHeight;
+
+  console.log("ScrollTop:", scrollTop);
+  console.log(
+    "Height:",
+    document.documentElement.scrollHeight - window.innerHeight
+  );
+  console.log("Is at bottom:", isAtBottom);
 
   if (isAtBottom) {
-    await router.push({ name: 'Details', params: { slug: nextPost.value?.slug?.current } })
+    console.log(
+      "At bottom of page, navigating to next post:",
+      nextPost.value?.slug?.current
+    );
+    await router.push({
+      name: "Details",
+      params: { slug: nextPost.value?.slug?.current },
+    });
   }
 }
 
@@ -261,8 +307,8 @@ onMounted(() => {
   window.addEventListener("scroll", handleScroll);
 });
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-  handleHeaderColor('white', false);
+  window.removeEventListener("scroll", handleScroll);
+  handleHeaderColor("white", false);
 });
 </script>
 <template>
@@ -277,16 +323,31 @@ onUnmounted(() => {
         <p class="project__content-title-year">{{ post.year }}</p>
       </div>
       <div class="project__content-body" v-html="body"></div>
-      <RouterLink :class="['contact-button', colors.circle]" :to="{ name: 'Contact' }">
+      <RouterLink
+        :class="['contact-button', colors.circle]"
+        :to="{ name: 'Contact' }"
+      >
         {{ post.callToAction }}
       </RouterLink>
     </article>
     <article class="project__gallery">
-      <img v-if="post.contentImage" :src="getSanityImageUrl(post.contentImage)"
-        :srcset="getSanityImageSrcSet(post.contentImage)" :sizes :alt="post.contentImage?.alt || post.title"
-        width="500" />
-      <img v-for="image in post.imageGallery" :key="image._key" :src="getSanityImageUrl(image as any)"
-        :srcset="getSanityImageSrcSet(image as any)" :sizes :alt="image?.alt || post.title" width="500" />
+      <img
+        v-if="post.contentImage"
+        :src="getSanityImageUrl(post.contentImage)"
+        :srcset="getSanityImageSrcSet(post.contentImage)"
+        :sizes
+        :alt="post.contentImage?.alt || post.title"
+        width="500"
+      />
+      <img
+        v-for="image in post.imageGallery"
+        :key="image._key"
+        :src="getSanityImageUrl(image as any)"
+        :srcset="getSanityImageSrcSet(image as any)"
+        :sizes
+        :alt="image?.alt || post.title"
+        width="500"
+      />
       <div class="project__gallery-action">
         <p>blijf scrollen voor het volgende project</p>
       </div>
@@ -294,7 +355,10 @@ onUnmounted(() => {
     <div :class="['full-circle', colors.circle]"></div>
     <div :class="['full-square', colors.square]"></div>
   </section>
-  <section ref="nextPostContainer" :class="['project__next-project', nextPostColors.circle]">
+  <section
+    ref="nextPostContainer"
+    :class="['project__next-project', nextPostColors.circle]"
+  >
     <p>{{ nextPost?.title }}</p>
   </section>
 </template>
@@ -365,8 +429,9 @@ html:has(body.not-scrollable) {
   flex-flow: column;
   line-height: 1.6;
 
-  >h2 {
+  > h2 {
     font-size: 8vw;
+    height: auto;
 
     @media screen and (min-width: 600px) {
       font-size: 4.5rem;
@@ -396,7 +461,6 @@ html:has(body.not-scrollable) {
   @media screen and (min-width: 1000px) {
     max-width: 100%;
   }
-
 }
 
 .project__gallery {
@@ -510,7 +574,7 @@ html:has(body.not-scrollable) {
   }
 
   @media screen and (min-width: 1000px) {
-    border-width: calc(110dvh/6);
+    border-width: calc(110dvh / 6);
     left: 60%;
     top: 180dvh;
   }
@@ -520,7 +584,7 @@ html:has(body.not-scrollable) {
   width: 100dvw;
   height: 100dvh;
 
-  font-family: 'Lemon Milk';
+  font-family: "Lemon Milk";
   font-weight: bold;
   font-size: 6vw;
 
@@ -585,5 +649,18 @@ html:has(body.not-scrollable) {
   &.dark-brown {
     color: var(--main-darkest);
   }
+}
+
+.project__next-project,
+.full-circle,
+.full-square,
+.project__gallery img {
+  /* Hint to the browser to put the element on the compositor layer */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+
+  /* isolate painting/layout where supported to reduce re-layout cost */
+  contain: paint;
 }
 </style>

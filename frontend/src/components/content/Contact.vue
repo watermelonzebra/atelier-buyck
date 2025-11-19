@@ -11,7 +11,7 @@ import { RouterLink } from 'vue-router';
                     realiseren van uw droom interieur op maat.</p>
             </div>
             <form action="submitForm" class="contact__form">
-                <div class="contact__form-row">
+                <div class="contact__form-row visually-hidden">
                     <label for="website">
                         <input id="website" type="text" name="website" placeholder="Uw website">
                         <span>website</span>
