@@ -17,4 +17,10 @@ const route = useRoute();
   <Footer v-if="route.name !== 'Details'"></Footer>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+main {
+  height: max-content;
+
+  min-height: 65dvh;
+}
+</style>

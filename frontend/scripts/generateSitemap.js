@@ -7,7 +7,7 @@ async function generateSitemap() {
     // Define your routes/URLs here
     const links = [
         { url: '/', changefreq: 'daily', priority: 1.0 },
-        { url: '/about', changefreq: 'weekly', priority: 0.8 },
+        { url: '/projects', changefreq: 'monthly', priority: 0.8 },
         { url: '/contact', changefreq: 'monthly', priority: 0.7 },
         // Add more routes as needed
     ];

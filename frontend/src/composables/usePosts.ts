@@ -32,7 +32,7 @@ function getPostsFromLocalStorage(): Array<Post> | null {
 }
 
 export function usePosts() {
-  // getAll
+  // getAll - loads all posts with caching
   async function getAllPosts() {
     const cachedPosts = getPostsFromLocalStorage();
     if (cachedPosts) {
@@ -46,13 +46,48 @@ export function usePosts() {
     return posts.value;
   }
 
-  // getById
+  // Fetch single post directly from Sanity (bypasses need to load all posts)
+  async function getPostBySlugDirect(slug: string): Promise<Post | null> {
+    try {
+      const postInterface = `{
+        _id,
+        _createdAt,
+        _updatedAt,
+        _rev,
+        _type,
+        title,
+        slug,
+        "imageGallery": imageGallery[]{
+          _key,
+          _type,
+          "asset": asset->
+        },
+        description,
+        year,
+        colorScheme,
+        body,
+        "contentImage": contentImage.asset->,
+        callToAction
+      }`;
+      const post = await client.fetch(
+        `*[_type == "post" && slug.current == $slug][0] ${postInterface}`,
+        { slug }
+      );
+      return post || null;
+    } catch (error) {
+      console.error("Error fetching post by slug:", error);
+      return null;
+    }
+  }
+
+  // Get post from cached array
   function getPostBySlug(slug: Post["slug"]): Post | null {
     if (!posts.value?.length) return null;
 
     return posts.value.find((post) => post.slug?.current === slug) || null;
   }
 
+  // Get next post from cached array
   function getNextPostBySlug(currentSlug: Post["slug"]) {
     if (!posts.value?.length) return null;
 
@@ -68,6 +103,7 @@ export function usePosts() {
   return {
     getAllPosts,
     getPostBySlug,
+    getPostBySlugDirect,
     getNextPostBySlug,
     posts,
   };

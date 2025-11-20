@@ -40,7 +40,7 @@ router.beforeEach((_to, from, next) => {
 
 let timeline: gsap.core.Timeline;
 
-const { getPostBySlug, getNextPostBySlug } = usePosts();
+const { getPostBySlug, getPostBySlugDirect, getNextPostBySlug } = usePosts();
 
 const colors = ref<Colors>({
   text: "white",
@@ -219,10 +219,15 @@ watch(
       try {
         toggleScrollable();
 
-        // Fetch the post details using the slug
-        post.value = await getPostBySlug(
+        // Try cache first, then fetch directly from Sanity if not cached
+        post.value = getPostBySlug(
           currentSlug as unknown as Post["slug"]
         );
+        
+        if (!post.value) {
+          // Direct query is faster than loading all posts
+          post.value = await getPostBySlugDirect(currentSlug as string);
+        }
 
         if (!post.value) {
           toggleScrollable();

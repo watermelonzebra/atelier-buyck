@@ -1,13 +1,12 @@
 {
   "name": "frontend",
-  "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "private": true,
   "scripts": {
+    "build": "vue-tsc -b && vite build",
     "dev": "vite",
-    "build": "npm run generate-sitemap && vue-tsc -b && vite build",
-    "preview": "vite preview",
-    "generate-sitemap": "node scripts/generateSitemap.js"
+    "generate-sitemap": "node scripts/generateSitemap.js",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@portabletext/block-tools": "^2.0.0",
@@ -20,6 +19,7 @@
     "@vueuse/core": "^13.5.0",
     "@vueuse/head": "^2.0.0",
     "@vueuse/router": "^13.5.0",
+    "axios": "^1.13.2",
     "dayjs": "^1.11.13",
     "groq": "^4.11.0",
     "gsap": "^3.13.0",
@@ -31,6 +31,8 @@
     "xml-formatter": "^3.6.6"
   },
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^4.0.0",
+    "@fullhuman/vue-cli-plugin-purgecss": "~7.0.2",
     "@types/gsap": "^1.20.2",
     "@types/pdfjs-dist": "^2.10.377",
     "@vitejs/plugin-vue": "^6.0.0",
@@ -39,5 +41,6 @@
     "typescript": "~5.8.3",
     "vite": "^7.0.0",
     "vue-tsc": "^2.2.10"
-  }
+  },
+  "type": "module"
 }

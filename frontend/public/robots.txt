@@ -1,0 +1,8 @@
+# Robots.txt for Atelier Buyck
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api
+
+Sitemap: https://atelier-buyck.be/sitemap.xml
