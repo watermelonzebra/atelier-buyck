@@ -1,24 +1,32 @@
 <script setup lang="ts">
-import { useHead } from '@vueuse/head';
-import Contact from '../components/content/Contact.vue';
+import { useHead } from "@vueuse/head";
+import Contact from "../components/content/Contact.vue";
+import { usePageSeo } from "../composables/usePageSeo";
+import { onMounted, ref } from "vue";
+import type { PageSettings } from "../resources/interfaces/sanity.types";
+import { setPageSeo } from "../helpers/useHead.helper";
 
-useHead({
-    title: 'Contact | Atelier Buyck',
-    meta: [
-        {
-            name: 'title',
-            content: 'Contact | Atelier Buyck',
-        },
-        {
-            name: 'description',
-            content: 'Get in touch with Sander Buyck for inquiries, collaborations, or feedback. Reach out via email or social media platforms.',
-        },
-    ],
-})
+const { getPageSeoByPage } = usePageSeo();
+const pageSeo = ref<PageSettings>();
+const contactData = ref<PageSettings["contactData"] | null>(null);
+
+onMounted(async () => {
+  pageSeo.value = await getPageSeoByPage("Contact");
+
+  if (pageSeo.value) {
+    contactData.value = pageSeo.value?.contactData;
+    setPageSeo(pageSeo.value, window.location.href);
+  }
+
+  useHead({
+    title: "Contact",
+  });
+});
 </script>
 <template>
   <section class="contact">
-    <Contact></Contact>
+    <h2 class="visually-hidden">Contact gegevens Atlier Buyck</h2>
+    <Contact :is-page="true" :contactData></Contact>
   </section>
 </template>
 <style lang="scss" scoped>

@@ -5,6 +5,7 @@ import {
   type RouteRecordRaw,
 } from "vue-router";
 import { usePosts } from "./composables/usePosts";
+import { usePageSeo } from "./composables/usePageSeo";
 
 const Index = () => import("./pages/Index.vue");
 const PrivacyPolicy = () => import("./pages/PrivacyPolicy.vue");
@@ -67,11 +68,17 @@ const router = createRouter({
   },
 });
 
+const pagesToFetchPosts = ["Index", "Projects", "Details"];
+const pagesToFetchPageSeo = ["Index", "Projects", "Contact"];
 router.beforeEach(async (to) => {
-  const pagesToFetchPosts = ["Index", "Projects", "Details"];
   if (pagesToFetchPosts.includes(to.name as string)) {
     const { getAllPosts } = usePosts();
     await getAllPosts();
+  }
+
+  if (pagesToFetchPageSeo.includes(to.name as string)) {
+    const { getAllPageSeo } = usePageSeo();
+    await getAllPageSeo();
   }
   ScrollTrigger.getAll().forEach((st) => st.kill());
 });

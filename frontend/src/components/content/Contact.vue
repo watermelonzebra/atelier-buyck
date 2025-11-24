@@ -2,6 +2,17 @@
 import { reactive, ref } from "vue";
 import { RouterLink } from "vue-router";
 import axios from "axios";
+import { type PageSettings } from "../../resources/interfaces/sanity.types";
+import {
+  getSanityImageSrcSet,
+  getSanityImageUrl,
+  sizes,
+} from "../../helpers/sanity-image.helper";
+
+defineProps<{
+  isPage: Boolean;
+  contactData: PageSettings["contactData"] | null;
+}>();
 
 const loading = ref(false);
 const message = ref<{ key: "succes" | "error"; value: string }>();
@@ -23,8 +34,6 @@ const handleSubmit = async (e: Event) => {
   e.preventDefault();
   loading.value = true;
   message.value = undefined;
-
-  console.log();
 
   try {
     const res = await axios.post(
@@ -61,7 +70,7 @@ const handleSubmit = async (e: Event) => {
   <article class="contact" id="contact">
     <div class="contact__wrapper">
       <div class="contact__content">
-        <h2>Maatwerk Interieur Project Starten? Vraag Advies.</h2>
+        <h3>Maatwerk Interieur Project Starten? Vraag Advies.</h3>
         <p>
           Bent u op zoek naar een unieke schrijnwerk oplossing? Wij helpen u
           graag verder met het ontwerpen en realiseren van uw droom interieur op
@@ -165,6 +174,52 @@ const handleSubmit = async (e: Event) => {
       </form>
       <div id="circle-stroke"></div>
     </div>
+    <div v-if="isPage" class="contact-data">
+      <div class="contact-data__wrapper">
+        <img
+          v-if="contactData?.contactDataImage"
+          class="contact-data__img"
+          :src="
+            getSanityImageUrl(contactData.contactDataImage, {
+              maxWidth: 400,
+              aspectRatio: 1,
+            })
+          "
+          :width="400"
+          :sizes
+          :srcset="
+            getSanityImageSrcSet(contactData.contactDataImage, {
+              maxWidth: 400,
+              aspectRatio: 1,
+            })
+          "
+        />
+        <div class="contact-data__content">
+          <h3>Atlier Buyck</h3>
+          <strong v-if="contactData?.showName && !!contactData.name">{{
+            contactData.name
+          }}</strong>
+          <ul class="contact-data__list">
+            <li v-if="contactData?.phone" class="contact-data__list-item">
+              <i class="ri-phone-fill"></i>
+              <p>{{ contactData.phone }}</p>
+            </li>
+            <li v-if="contactData?.email" class="contact-data__list-item">
+              <i class="ri-mail-fill"></i>
+              <p>{{ contactData.email }}</p>
+            </li>
+            <li v-if="contactData?.btw" class="contact-data__list-item">
+              <i class="ri-briefcase-2-fill"></i>
+              <p>{{ contactData.btw }}</p>
+            </li>
+            <li v-if="contactData?.address" class="contact-data__list-item">
+              <i class="ri-map-pin-2-fill"></i>
+              <address>{{ contactData.address }}</address>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </article>
 </template>
 <style lang="scss" scoped>
@@ -175,6 +230,7 @@ const handleSubmit = async (e: Event) => {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-flow: column;
 }
 
 .contact__wrapper {
@@ -199,7 +255,7 @@ const handleSubmit = async (e: Event) => {
   @media screen and (min-width: 1150px) {
     grid-template-columns: 52rem 1fr;
     grid-template-rows: auto;
-    padding: 12.4rem var(--spacing-xxl) 22.5rem var(--spacing-xxl);
+    padding: 12.4rem var(--spacing-xxl) 15rem var(--spacing-xxl);
   }
 }
 
@@ -317,5 +373,66 @@ textarea {
       font-size: 1.35rem;
     }
   }
+}
+
+.contact-data {
+  padding: var(--spacing-xxl) var(--spacing-s) var(--spacing-xl)
+    var(--spacing-s);
+
+  width: 100%;
+
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-xl);
+
+  @media screen and (min-width: 900px) {
+    padding: 0;
+    padding-bottom: var(--spacing-xxxl);
+  }
+}
+
+.contact-data__wrapper {
+  padding: var(--spacing-xxl) 0;
+
+  background-color: var(--main-lightest);
+  width: 100%;
+
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-xl);
+
+  @media screen and (min-width: 600px) {
+    max-width: max-content;
+    padding: var(--spacing-xxl);
+  }
+  @media screen and (min-width: 900px) {
+    flex-flow: row;
+  }
+  @media screen and (min-width: 1100px) {
+    padding: var(--spacing-xxxl);
+    gap: var(--spacing-xxxl);
+  }
+}
+
+.contact-data__img {
+  aspect-ratio: 1/1;
+}
+
+.contact-data__list {
+  display: flex;
+  flex-flow: column;
+  gap: var(--spacing-xxs);
+
+  padding: 0;
+  margin: 0;
+}
+
+.contact-data__list-item {
+  display: flex;
+  gap: var(--spacing-xs);
 }
 </style>

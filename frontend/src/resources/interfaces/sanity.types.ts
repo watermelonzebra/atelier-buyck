@@ -13,6 +13,93 @@
  */
 
 // Source: schema.json
+export type PageSettings = {
+  _id: string
+  _type: 'pageSettings'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  page?: 'home' | 'projects' | 'contact'
+  foldImage?: {
+    asset?: {
+      _ref: string
+      _type: 'reference'
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  contactData?: {
+    showName?: boolean
+    name?: string
+    phone?: string
+    email?: string
+    btw?: string
+    address?: string
+    contactDataImage?: {
+      asset?: {
+        _ref: string
+        _type: 'reference'
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    }
+  }
+  seo?: SeoMetaFields
+}
+
+export type SeoMetaFields = {
+  _type: 'seoMetaFields'
+  nofollowAttributes?: boolean
+  metaTitle?: string
+  metaDescription?: string
+  metaImage?: {
+    asset?: {
+      _ref: string
+      _type: 'reference'
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  }
+  seoKeywords?: Array<string>
+  openGraph?: OpenGraph
+  additionalMetaTags?: Array<
+    {
+      _key: string
+    } & MetaTag
+  >
+  twitter?: Twitter
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top?: number
+  bottom?: number
+  left?: number
+  right?: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x?: number
+  y?: number
+  height?: number
+  width?: number
+}
+
 export type ContentImage = {
   _type: 'contentImage'
   asset?: {
@@ -100,8 +187,71 @@ export type Post = {
     _type: 'contentImage'
     _key: string
   }>
-  colorScheme?: 'yellow' | 'brown' | 'green' | 'dark-brown',
-  callToAction: string
+  colorScheme?: 'yellow' | 'brown' | 'green' | 'dark-brown'
+  callToAction?: string
+  seo?: SeoMetaFields
+}
+
+export type Slug = {
+  _type: 'slug'
+  current?: string
+  source?: string
+}
+
+export type Twitter = {
+  _type: 'twitter'
+  cardType?: string
+  creator?: string
+  site?: string
+  handle?: string
+}
+
+export type OpenGraph = {
+  _type: 'openGraph'
+  url?: string
+  image?: {
+    asset?: {
+      _ref: string
+      _type: 'reference'
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  }
+  title?: string
+  description?: string
+  siteName?: string
+}
+
+export type MetaTag = {
+  _type: 'metaTag'
+  metaAttributes?: Array<
+    {
+      _key: string
+    } & MetaAttribute
+  >
+}
+
+export type MetaAttribute = {
+  _type: 'metaAttribute'
+  attributeKey?: string
+  attributeType?: 'string' | 'image'
+  attributeValueImage?: {
+    asset?: {
+      _ref: string
+      _type: 'reference'
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  }
+  attributeValueString?: string
 }
 
 export type MediaTag = {
@@ -139,20 +289,15 @@ export type SanityImageDimensions = {
   aspectRatio?: number
 }
 
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x?: number
-  y?: number
-  height?: number
-  width?: number
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top?: number
-  bottom?: number
-  left?: number
-  right?: number
+export type SanityImageMetadata = {
+  _type: 'sanity.imageMetadata'
+  location?: Geopoint
+  dimensions?: SanityImageDimensions
+  palette?: SanityImagePalette
+  lqip?: string
+  blurHash?: string
+  hasAlpha?: boolean
+  isOpaque?: boolean
 }
 
 export type SanityFileAsset = {
@@ -175,6 +320,13 @@ export type SanityFileAsset = {
   path?: string
   url?: string
   source?: SanityAssetSourceData
+}
+
+export type SanityAssetSourceData = {
+  _type: 'sanity.assetSourceData'
+  name?: string
+  id?: string
+  url?: string
 }
 
 export type SanityImageAsset = {
@@ -200,17 +352,6 @@ export type SanityImageAsset = {
   source?: SanityAssetSourceData
 }
 
-export type SanityImageMetadata = {
-  _type: 'sanity.imageMetadata'
-  location?: Geopoint
-  dimensions?: SanityImageDimensions
-  palette?: SanityImagePalette
-  lqip?: string
-  blurHash?: string
-  hasAlpha?: boolean
-  isOpaque?: boolean
-}
-
 export type Geopoint = {
   _type: 'geopoint'
   lat?: number
@@ -218,33 +359,26 @@ export type Geopoint = {
   alt?: number
 }
 
-export type Slug = {
-  _type: 'slug'
-  current?: string
-  source?: string
-}
-
-export type SanityAssetSourceData = {
-  _type: 'sanity.assetSourceData'
-  name?: string
-  id?: string
-  url?: string
-}
-
 export type AllSanitySchemaTypes =
+  | PageSettings
+  | SeoMetaFields
+  | SanityImageCrop
+  | SanityImageHotspot
   | ContentImage
   | ContentBlock
   | Post
+  | Slug
+  | Twitter
+  | OpenGraph
+  | MetaTag
+  | MetaAttribute
   | MediaTag
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
-  | SanityImageHotspot
-  | SanityImageCrop
-  | SanityFileAsset
-  | SanityImageAsset
   | SanityImageMetadata
-  | Geopoint
-  | Slug
+  | SanityFileAsset
   | SanityAssetSourceData
+  | SanityImageAsset
+  | Geopoint
 export declare const internalGroqTypeReferenceTo: unique symbol

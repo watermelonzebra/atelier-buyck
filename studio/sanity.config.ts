@@ -12,6 +12,7 @@ export default defineConfig({
   title: process.env.SANITY_STUDIO_TITLE,
   projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'default-project-id',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
+
   plugins: [
     structureTool({
       structure: deskStructure,
@@ -33,5 +34,5 @@ export default defineConfig({
   schema: {
     name: 'default',
     types: schemaTypes,
-  }
+  },
 })

@@ -4,6 +4,6 @@ import { contentImage } from './contentImage'
 
 import { post } from './post'
 
-export const schemaTypes = [post, contentBlock, contentImage]
+import { pageSettings } from './pageSettings'
 
-
+export const schemaTypes = [post, contentBlock, contentImage, pageSettings]

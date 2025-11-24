@@ -31,8 +31,6 @@ const head = createHead({
   ],
 });
 
-
-
 app.use(router);
 app.use(head);
 

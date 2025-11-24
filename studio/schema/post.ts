@@ -4,6 +4,7 @@ import { contentImage } from './contentImage'
 
 export const post = defineType({
   name: 'post',
+  title: 'Projecten',
   type: 'document',
   icon: DocumentIcon,
   fields: [
