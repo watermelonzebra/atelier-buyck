@@ -111,8 +111,6 @@ onMounted(async () => {
 }
 
 .fold__firmname {
-  // should be aligned with the center of the screen
-  @include line-height(0.7);
   position: absolute;
   bottom: 0;
   left: 50%;

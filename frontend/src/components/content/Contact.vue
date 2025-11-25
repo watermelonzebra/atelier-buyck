@@ -37,14 +37,13 @@ const handleSubmit = async (e: Event) => {
 
   try {
     const res = await axios.post(
-      "https://mail-lguahhfg6-simon-buycks-projects.vercel.app/api/send-mail",
+      import.meta.env.VITE_APP_MAIL_API_URL,
       mailData,
       {
         headers: {
           "Content-Type": "application/json",
           "X-API-Key": API_KEY,
         },
-        withCredentials: true,
       }
     );
     console.log(res);

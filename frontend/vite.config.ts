@@ -10,15 +10,7 @@ export default defineConfig({
       "remixicon/fonts/remixicon.css",
     ],
   },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `
-          @use "@/assets/scss/_globals.scss" as *;
-          `,
-      },
-    },
-  },
+
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

@@ -13,10 +13,9 @@ import { useHead } from "@vueuse/head";
 const { posts } = usePosts();
 const { getPageSeoByPage } = usePageSeo();
 
-onMounted(() => {
-  const pageSeo = getPageSeoByPage("Projects");
-
-  setPageSeo(pageSeo, document.location.href);
+onMounted(async () => {
+  const pageSeo = await getPageSeoByPage("Projects");
+  if (pageSeo) setPageSeo(pageSeo, document.location.href);
   useHead({
     title: "Projecten",
   });
