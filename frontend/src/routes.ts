@@ -61,26 +61,29 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.VITE_APP_BASE_URL),
   routes,
   scrollBehavior: async (_to, _from, _savedPosition) => {
     return { left: 0, top: 0, behavior: "instant" };
   },
 });
 
-const pagesToFetchPosts = ["Index", "Projects", "Details"];
+const pagesWithLitePosts = ["Index", "Projects", "Details"];
 const pagesToFetchPageSeo = ["Index", "Projects", "Contact"];
 router.beforeEach(async (to) => {
-  if (pagesToFetchPosts.includes(to.name as string)) {
+  ScrollTrigger.getAll().forEach((st) => st.kill());
+
+  const toName = to.name as string;
+
+  if (pagesWithLitePosts.includes(toName)) {
     const { getAllPosts } = usePosts();
     await getAllPosts();
   }
 
-  if (pagesToFetchPageSeo.includes(to.name as string)) {
-    const { getAllPageSeo } = usePageSeo();
-    await getAllPageSeo();
+  if (pagesToFetchPageSeo.includes(toName)) {
+    const { getPageSeoByPage } = usePageSeo();
+    await getPageSeoByPage(toName);
   }
-  ScrollTrigger.getAll().forEach((st) => st.kill());
 });
 
 export default router;

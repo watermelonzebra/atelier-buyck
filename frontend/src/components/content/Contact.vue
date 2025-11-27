@@ -46,7 +46,6 @@ const handleSubmit = async (e: Event) => {
         },
       }
     );
-    console.log(res);
     if (res.data.success) {
       message.value = { key: "succes", value: res.data.message };
     } else {
@@ -187,6 +186,7 @@ const handleSubmit = async (e: Event) => {
           "
           :width="400"
           :height="400"
+          loading="lazy"
           :sizes
           :srcset="
             getSanityImageSrcSet(contactData.contactDataImage, {

@@ -6,7 +6,7 @@ const xmlFormat = require('xml-formatter');
 async function generateSitemap() {
     // Define your routes/URLs here
     const links = [
-        { url: '/', changefreq: 'daily', priority: 1.0 },
+        { url: '/', changefreq: 'monthly', priority: 1.0 },
         { url: '/projects', changefreq: 'monthly', priority: 0.8 },
         { url: '/contact', changefreq: 'monthly', priority: 0.7 },
         // Add more routes as needed

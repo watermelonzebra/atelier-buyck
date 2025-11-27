@@ -41,11 +41,14 @@ function getImageMetaUrl(imageRef: any): string | null {
  * @param defaultTitle A fallback title to use if metaTitle is missing.
  */
 export function setPageSeo(
-  pageSettings: PageSettings,
+  pageSettings: PageSettings | SeoMetaFields,
   currentUrl: string,
   defaultTitle: string = "Atelier Buyck"
 ): void {
-  const seo: SeoMetaFields | undefined = pageSettings.seo;
+  console.log("setting page SEO", pageSettings);
+  const seo: SeoMetaFields | undefined = (pageSettings as PageSettings)?.seo
+    ? (pageSettings as PageSettings)?.seo
+    : (pageSettings as SeoMetaFields);
 
   // Guard clause for missing SEO data
   if (!seo) {

@@ -3,7 +3,7 @@ import { useHead } from "@vueuse/head";
 import Contact from "../components/content/Contact.vue";
 import Fold from "../components/content/Fold.vue";
 import Posts from "../components/content/Posts.vue";
-import { onMounted, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { setPageSeo } from "../helpers/useHead.helper";
 import { usePageSeo } from "../composables/usePageSeo";
 import type { PageSettings } from "../resources/interfaces/sanity.types";
@@ -11,16 +11,16 @@ import type { PageSettings } from "../resources/interfaces/sanity.types";
 const { getPageSeoByPage } = usePageSeo();
 const pageSeo = ref<PageSettings | null>(null);
 
-onMounted(async () => {
+useHead({
+  title: "Home",
+});
+
+onBeforeMount(async () => {
   pageSeo.value = await getPageSeoByPage("Index");
 
   if (pageSeo.value) {
     setPageSeo(pageSeo.value, document.location.href);
   }
-
-  useHead({
-    title: "Home",
-  });
 });
 
 //  title: "Atelier Buyck | Maatwerk Interieur Project Starten? Vraag Advies in Izegem.",

@@ -1,7 +1,5 @@
 // sanity.js
 import { createClient } from "@sanity/client";
-import { type Post } from "./resources/interfaces/sanity.types";
-import { POST_QUERY, postInterface } from "./utils/groq-queries";
 // Import using ESM URL imports in environments that supports it:
 // import {createClient} from 'https://esm.sh/@sanity/client'
 
@@ -11,20 +9,3 @@ export const client = createClient({
   apiVersion: "2024-06-01", // use current UTC date - see "specifying API version"!
   useCdn: true, // `false` if you want to ensure fresh data
 });
-
-// uses GROQ to query content: https://www.sanity.io/docs/groq
-export async function getPosts(): Promise<Array<Post>> {
-  const posts = await client.fetch(POST_QUERY);
-  console.info("Posts fetched:", posts);
-  return posts;
-}
-
-export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const post = await client.fetch(
-    `
-    *[_type == "post" && slug.current == $slug][0] ${postInterface}
-  `,
-    { slug }
-  );
-  return post || null;
-}

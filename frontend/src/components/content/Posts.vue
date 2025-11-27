@@ -160,7 +160,7 @@ onMounted(async () => {
             :sizes
             alt="Post Image"
             class="projects__posts-item-cover"
-            lazy
+            loading="lazy"
             fetchpriority="low"
           />
           <div

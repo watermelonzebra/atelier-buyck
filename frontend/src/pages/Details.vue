@@ -16,12 +16,13 @@ import {
   sizes,
 } from "../helpers/sanity-image.helper";
 import { toHTML } from "@portabletext/to-html";
-import type { Post } from "../resources/interfaces/sanity.types";
+import type { Post, SeoMetaFields } from "../resources/interfaces/sanity.types";
 import type { TypedObject } from "@sanity/types";
 import { usePosts } from "../composables/usePosts";
 import { gsap, mm } from "../resources/gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useHead } from "@vueuse/head";
+import { setPageSeo } from "../helpers/useHead.helper";
 
 type PageColors = "yellow" | "brown" | "green" | "dark-brown" | "white";
 interface Colors {
@@ -48,7 +49,7 @@ router.beforeEach((_to, from, next) => {
 
 let timeline: gsap.core.Timeline;
 
-const { getPostBySlug, getPostBySlugDirect, getNextPostBySlug } = usePosts();
+const { getPostBySlug, getNextPostBySlug } = usePosts();
 
 const colors = ref<Colors>({
   text: "white",
@@ -245,17 +246,22 @@ watch(
         toggleScrollable();
 
         // Try cache first, then fetch directly from Sanity if not cached
-        post.value = getPostBySlug(currentSlug as unknown as Post["slug"]);
-
-        if (!post.value) {
-          // Direct query is faster than loading all posts
-          post.value = await getPostBySlugDirect(currentSlug as string);
-        }
+        post.value = await getPostBySlug(currentSlug);
 
         if (!post.value) {
           toggleScrollable();
           await router.back();
           return;
+        }
+
+        setPageSeo(post.value.seo as SeoMetaFields, window.location.href);
+
+        handleColors(post.value?.colorScheme, colors);
+
+        if (showTransitionAnimation.value) {
+          loadTransitionAnimations();
+        } else {
+          toggleScrollable();
         }
 
         useHead({
@@ -273,20 +279,13 @@ watch(
         });
 
         body.value = toHTML(post.value?.body as unknown as TypedObject);
-        handleColors(post.value?.colorScheme, colors);
 
         nextPost.value = await getNextPostBySlug(
           currentSlug as unknown as Post["slug"]
         );
+
         handleColors(nextPost.value?.colorScheme, nextPostColors);
-
         handleHeaderColor(colors.value.circle);
-
-        if (showTransitionAnimation.value) {
-          loadTransitionAnimations();
-        } else {
-          toggleScrollable();
-        }
 
         setTimeout(() => {
           if (showTransitionAnimation.value) toggleScrollable();
@@ -353,7 +352,7 @@ onUnmounted(() => {
         :sizes
         :alt="post.contentImage?.alt || post.title"
         width="500"
-        lazy
+        eager
       />
       <img
         v-for="image in post.imageGallery"

@@ -45,6 +45,7 @@ onMounted(async () => {
                 aspectRatio: 1,
               })
             "
+            loading="eager"
             width="700"
           />
           <div :class="['projects__list-item__content', post.colorScheme]">

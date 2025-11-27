@@ -9,7 +9,7 @@ import {
 } from "../../helpers/sanity-image.helper";
 
 defineProps<{
-  foldImage: PageSettings["foldImage"];
+  foldImage?: PageSettings["foldImage"];
 }>();
 
 const windowSize = computed(() => {
@@ -127,6 +127,7 @@ onMounted(async () => {
           "
           sizes="(min-width: 1000px) 1440vw, (min-width: 2000px) 2160w, 720w"
           width="300"
+          loading="eager"
           fetchpriority="high"
         />
         <p>scroll en ontdek</p>
