@@ -134,7 +134,7 @@ header {
   width: 100%;
   z-index: 1000;
 
-  transition: transform 0.75s cubic-bezier(1, -0.3, 0.1, 1);
+  transition: transform 0.3s cubic-bezier(1, -0.3, 0.1, 1);
   transform: translateY(0);
   /* Default: Visible */
 

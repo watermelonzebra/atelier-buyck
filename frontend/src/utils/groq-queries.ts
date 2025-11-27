@@ -1,4 +1,4 @@
-import { defineQuery } from 'groq';
+import { defineQuery } from "groq";
 
 const postInterface = `{
       _id,
@@ -8,16 +8,22 @@ const postInterface = `{
       _type,
       title,
       slug,
+      contentImage{
+        asset->,
+        crop,
+        hotspot,
+        alt
+      },
       "imageGallery": imageGallery[]{
-        _key,
-        _type,
-        "asset": asset->
+        asset->,
+        crop,
+        hotspot,
+        alt,
       },
       description,
       year,
       colorScheme,
       body,
-      "contentImage": contentImage.asset->,
       callToAction
     }`;
 
@@ -25,6 +31,4 @@ const POST_QUERY = defineQuery(`
     * [_type == "post"] ${postInterface} | order(_createdAt asc)
         `);
 
-export {
-    POST_QUERY, postInterface
-}
+export { POST_QUERY, postInterface };
