@@ -3,17 +3,8 @@ import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
 import { RouterView, useRoute } from "vue-router";
 import CookieBanner from "./components/CookieBanner.vue";
-import { onMounted } from "vue";
 
 const route = useRoute();
-
-onMounted(() => {
-  const scale = window.devicePixelRatio;
-
-  if (scale < 1) {
-    window.devicePixelRatio = 1;
-  }
-});
 </script>
 
 <template>

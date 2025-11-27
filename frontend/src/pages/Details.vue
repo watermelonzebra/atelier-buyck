@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { useRouteParams } from "@vueuse/router";
 import { useRouter } from "vue-router";
-import { nextTick, onMounted, onUnmounted, ref, watch, type Ref } from "vue";
+import {
+  computed,
+  nextTick,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+  type Ref,
+} from "vue";
 import {
   getSanityImageSrcSet,
   getSanityImageUrl,
@@ -163,18 +171,36 @@ function loadTransitionAnimations() {
     }
   );
 
-  gsap.from(".project__content-title>h2", {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 20,
-    ease: "sine.inOut",
-    fontWeight: "bold",
-    fontSize: "6vw",
-    width: "100dvw",
-    height: "100dvh",
-    marginTop: "calc(var(--spacing-xxxl) * -1)",
+  const fontSizeByMedia = computed(() => {
+    const mql = window.matchMedia("(min-width: 600px)");
+
+    if (mql.matches) return "4.5rem";
+    return "8vw";
   });
+
+  gsap.fromTo(
+    ".project__content-title>h2",
+    {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 20,
+      ease: "sine.inOut",
+      fontWeight: "bold",
+      fontSize: "6vw",
+      width: "100dvw",
+      height: "100dvh",
+      marginTop: "calc(var(--spacing-xxxl) * -1)",
+    },
+    {
+      height: "auto",
+      width: "auto",
+      marginTop: "unset",
+      fontSize: fontSizeByMedia.value,
+      alignItems: "start",
+      justifyContent: "start",
+    }
+  );
 
   gsap.to(contentToReveal, {
     opacity: 1,
@@ -219,10 +245,8 @@ watch(
         toggleScrollable();
 
         // Try cache first, then fetch directly from Sanity if not cached
-        post.value = getPostBySlug(
-          currentSlug as unknown as Post["slug"]
-        );
-        
+        post.value = getPostBySlug(currentSlug as unknown as Post["slug"]);
+
         if (!post.value) {
           // Direct query is faster than loading all posts
           post.value = await getPostBySlugDirect(currentSlug as string);
@@ -283,7 +307,8 @@ async function handleScroll() {
   // 2. Get scroll metrics
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   const isAtBottom =
-    scrollTop >= (document.documentElement.scrollHeight - window.innerHeight) - 50;
+    scrollTop >=
+    document.documentElement.scrollHeight - window.innerHeight - 50;
 
   if (isAtBottom) {
     await router.push({
