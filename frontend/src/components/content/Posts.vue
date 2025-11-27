@@ -154,9 +154,6 @@ onMounted(async () => {
             "
             :srcset="
               getSanityImageSrcSet(post.contentImage, {
-                width: windowSize.width,
-                height: windowSize.height,
-                maxWidth: windowSize.width,
                 aspectRatio: windowSize.width / windowSize.height,
               })
             "

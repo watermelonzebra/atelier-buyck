@@ -148,6 +148,8 @@ onMounted(async () => {
   height: 100dvh;
   width: 100dvw;
 
+  min-height: 80rem;
+
   overflow: hidden;
   position: relative;
 }
