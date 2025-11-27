@@ -185,6 +185,7 @@ const handleSubmit = async (e: Event) => {
             })
           "
           :width="400"
+          :height="400"
           :sizes
           :srcset="
             getSanityImageSrcSet(contactData.contactDataImage, {
@@ -393,7 +394,7 @@ textarea {
 }
 
 .contact-data__wrapper {
-  padding: var(--spacing-xxl) 0;
+  padding: var(--spacing-xxl) var(--spacing-l);
 
   background-color: var(--main-lightest);
   width: 100%;
