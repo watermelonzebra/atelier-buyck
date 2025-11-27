@@ -164,8 +164,9 @@ const handleSubmit = async (e: Event) => {
           {{ message.value }}
         </p>
         <p>
-          By submitting this form, you agree that we may use your information to
-          contact you regarding your inquiry, as described in our
+          Door dit formulier in te dienen, gaat u ermee akkoord dat wij uw
+          gegevens gebruiken om contact met u op te nemen over uw vraag, zoals
+          beschreven in onze
           <RouterLink :to="{ name: 'PrivacyPolicy' }"
             >Privacy Policy</RouterLink
           >
@@ -201,12 +202,26 @@ const handleSubmit = async (e: Event) => {
           }}</strong>
           <ul class="contact-data__list">
             <li v-if="contactData?.phone" class="contact-data__list-item">
-              <i class="ri-phone-fill"></i>
-              <p>{{ contactData.phone }}</p>
+              <a
+                :href="`tel:${contactData.phone}`"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Bellen naar Atelier Buyck"
+              >
+                <i class="ri-phone-fill"></i>
+                <p>{{ contactData.phone }}</p>
+              </a>
             </li>
             <li v-if="contactData?.email" class="contact-data__list-item">
-              <i class="ri-mail-fill"></i>
-              <p>{{ contactData.email }}</p>
+              <a
+                :href="`mailto:${contactData.email}`"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="mailen naar Atelier Buyck"
+              >
+                <i class="ri-mail-fill"></i>
+                <p>{{ contactData.email }}</p>
+              </a>
             </li>
             <li v-if="contactData?.btw" class="contact-data__list-item">
               <i class="ri-briefcase-2-fill"></i>
@@ -431,7 +446,8 @@ textarea {
   margin: 0;
 }
 
-.contact-data__list-item {
+.contact-data__list-item,
+.contact-data__list-item a {
   display: flex;
   gap: var(--spacing-xs);
 }

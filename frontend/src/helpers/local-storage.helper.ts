@@ -15,7 +15,7 @@ export function getFromLocalStorage<T>(key: string): T | null {
     const cacheTime = 1000 * 60 * 10; // 10 minutes
 
     if (currentTime - parsedData.timestamp < cacheTime) {
-      return parsedData;
+      return parsedData.data;
     } else {
       localStorage.removeItem(key);
     }

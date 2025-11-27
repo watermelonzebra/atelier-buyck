@@ -76,6 +76,7 @@
                   href="https://www.facebook.com/p/Atelier-Buyck-100088506063648/"
                   target="_blank"
                   rel="noopener noreferrer"
+                   aria-label="naar Atelier Buyck's Facebook pagina"
                   >Facebook</a
                 >
               </li>
@@ -84,6 +85,7 @@
                   href="https://www.instagram.com/atelierbuyck/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="naar Atelier Buyck's Instagram pagina"
                   >Instagram</a
                 >
               </li>
