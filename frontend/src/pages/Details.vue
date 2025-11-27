@@ -284,7 +284,7 @@ async function handleScroll() {
   // 2. Get scroll metrics
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   const isAtBottom =
-    scrollTop >= document.documentElement.scrollHeight - window.innerHeight;
+    scrollTop >= (document.documentElement.scrollHeight - window.innerHeight) - 50;
 
   if (isAtBottom) {
     await router.push({
@@ -375,6 +375,8 @@ html:has(body.not-scrollable) {
   position: relative;
   z-index: 10;
   overflow: hidden;
+
+  min-height: 100vh;
 
   @media screen and (min-width: 600px) {
     padding: 0 var(--spacing-xl);

@@ -95,6 +95,9 @@ onMounted(async () => {
       <p class="fold__content-description">
         Wij creëren maatwerk interieurs met een focus op detail, vakmanschap en
         de realisatie van uw unieke woonambities.
+        <RouterLink :to="{ name: 'Contact' }">
+          <span>Offerte Aanvragen</span>
+        </RouterLink>
       </p>
     </div>
     <div id="fold-square"></div>
@@ -202,8 +205,32 @@ onMounted(async () => {
 
 .fold__content-description {
   display: flex;
-  align-items: center;
+  flex-flow: column;
   justify-content: center;
+
+  gap: var(--spacing-s);
+
+  > a {
+    width: max-content;
+    padding: var(--spacing-xs) var(--spacing-l);
+    margin: 0 auto;
+    border-radius: 10rem;
+
+    border: none;
+    background-color: var(--main-dark);
+    color: var(--white);
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: all 0.75s cubic-bezier(1, -0.3, 0.1, 1);
+
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
 }
 
 .fold__image-container {

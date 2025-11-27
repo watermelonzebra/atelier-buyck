@@ -100,3 +100,8 @@ p {
 .hidden {
   display: none;
 }
+
+a {
+  text-decoration: none;
+  color: var(--main-darkest);
+}
