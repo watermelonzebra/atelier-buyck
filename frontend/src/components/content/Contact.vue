@@ -190,7 +190,7 @@ const handleSubmit = async (e: Event) => {
           :sizes
           :srcset="
             getSanityImageSrcSet(contactData.contactDataImage, {
-              maxWidth: 400,
+              maxWidth: 800,
               aspectRatio: 1,
             })
           "
