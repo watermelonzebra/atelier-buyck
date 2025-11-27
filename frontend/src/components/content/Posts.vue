@@ -13,6 +13,13 @@ const { posts } = usePosts();
 const clampedPosts = computed(() => posts.value?.slice(0, 3));
 const postsAmount = computed(() => clampedPosts.value?.length || 0);
 
+const windowSize = computed(() => {
+  return {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+});
+
 let projectsTimeline: gsap.core.Timeline;
 
 async function loadGsapPostAnimations(
@@ -138,8 +145,21 @@ onMounted(async () => {
           :to="{ name: 'Details', params: { slug: post.slug?.current } }"
         >
           <img
-            :src="getSanityImageUrl(post.contentImage)"
-            :srcset="getSanityImageSrcSet(post.contentImage)"
+            :src="
+              getSanityImageUrl(post.contentImage, {
+                width: windowSize.width,
+                height: windowSize.height,
+                maxWidth: windowSize.width,
+              })
+            "
+            :srcset="
+              getSanityImageSrcSet(post.contentImage, {
+                width: windowSize.width,
+                height: windowSize.height,
+                maxWidth: windowSize.width,
+                aspectRatio: windowSize.width / windowSize.height,
+              })
+            "
             :sizes
             alt="Post Image"
             class="projects__posts-item-cover"

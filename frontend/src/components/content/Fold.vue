@@ -1,7 +1,23 @@
 <script lang="ts" setup>
-import { nextTick, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { mm, gsap } from "../../resources/gsap";
+import type { PageSettings } from "../../resources/interfaces/sanity.types";
+import {
+  getSanityImageSrcSet,
+  getSanityImageUrl,
+  sizes,
+} from "../../helpers/sanity-image.helper";
 
+defineProps<{
+  foldImage: PageSettings["foldImage"];
+}>();
+
+const windowSize = computed(() => {
+  return {
+    width: window.innerWidth,
+    heihgt: window.innerHeight,
+  };
+});
 const image = ref<HTMLElement | null>(null);
 
 onMounted(async () => {
@@ -77,6 +93,29 @@ onMounted(async () => {
       <p class="fold__content-title">Start hier uw droomproject</p>
       <div class="fold__image-container">
         <img
+          v-if="foldImage"
+          ref="image"
+          class="fold__image-container-image"
+          :src="
+            getSanityImageUrl(foldImage, {
+              maxWidth: windowSize.width,
+              width: 300,
+            })
+          "
+          :alt="foldImage?.alt || 'fold foto voor atelier buyck'"
+          :srcset="
+            getSanityImageSrcSet(foldImage, {
+              maxWidth: windowSize.width,
+              width: 300,
+              aspectRatio: 2,
+            })
+          "
+          :sizes
+          width="500"
+          fetchpriority="high"
+        />
+        <img
+          v-else
           ref="image"
           class="fold__image-container-image"
           src="../../assets/img/fold-image@1440.png"
@@ -226,7 +265,6 @@ onMounted(async () => {
 
     transition: all 0.75s cubic-bezier(1, -0.3, 0.1, 1);
 
-
     &:hover {
       transform: scale(1.2);
     }
@@ -249,5 +287,11 @@ onMounted(async () => {
   max-height: 100%;
   background-color: var(--black);
   background-blend-mode: screen;
+
+  aspect-ratio: 2/1.1;
+
+  @media screen and (min-width: 1050px) {
+    max-width: 100%;
+  }
 }
 </style>

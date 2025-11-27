@@ -3,17 +3,19 @@ import { useHead } from "@vueuse/head";
 import Contact from "../components/content/Contact.vue";
 import Fold from "../components/content/Fold.vue";
 import Posts from "../components/content/Posts.vue";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { setPageSeo } from "../helpers/useHead.helper";
 import { usePageSeo } from "../composables/usePageSeo";
+import type { PageSettings } from "../resources/interfaces/sanity.types";
 
 const { getPageSeoByPage } = usePageSeo();
+const pageSeo = ref<PageSettings | null>(null);
 
 onMounted(async () => {
-  const pageSeo = await getPageSeoByPage("Index");
+  pageSeo.value = await getPageSeoByPage("Index");
 
-  if (pageSeo) {
-    setPageSeo(pageSeo, document.location.href);
+  if (pageSeo.value) {
+    setPageSeo(pageSeo.value, document.location.href);
   }
 
   useHead({
@@ -29,7 +31,7 @@ onMounted(async () => {
     <h1 class="visually-hidden">
       Maatwerk Interieur Project Starten? Vraag Advies in Izegem.
     </h1>
-    <Fold></Fold>
+    <Fold :fold-image="pageSeo?.foldImage"></Fold>
     <Posts></Posts>
     <Contact :is-page="false" :contact-data="null"></Contact>
   </section>

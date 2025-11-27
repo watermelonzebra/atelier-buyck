@@ -118,7 +118,6 @@ function loadAnimations() {
     start: "bottom bottom",
     end: "+=100%",
     animation: timeline,
-    markers: true,
   });
 }
 
@@ -483,6 +482,8 @@ html:has(body.not-scrollable) {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  background-color: var(--main-lightest);
 }
 
 .back-button {

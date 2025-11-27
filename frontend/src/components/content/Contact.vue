@@ -434,6 +434,8 @@ textarea {
 }
 
 .contact-data__img {
+  width: auto;
+  height: auto;
   aspect-ratio: 1/1;
 }
 
@@ -450,5 +452,14 @@ textarea {
 .contact-data__list-item a {
   display: flex;
   gap: var(--spacing-xs);
+}
+
+form > p {
+  color: var(--black);
+  padding: var(--spacing-s);
+
+  a {
+    color: inherit;
+  }
 }
 </style>

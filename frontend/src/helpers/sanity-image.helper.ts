@@ -58,7 +58,8 @@ function getSanityImageSrcSet(source: Post['contentImage'], options: ImageOption
   }).filter((w) => w !== null)
 
   const heights = widths.map((width) => {
-    return width * (options?.aspectRatio ?? (source?.asset as any)?.metadata!.dimensions.aspectRatio)
+    console.log('asset: ', source);
+    return width * (options?.aspectRatio ?? (source?.asset as any)?.metadata?.dimensions.aspectRatio ?? 1)
   })
 
   const srcSet = widths
