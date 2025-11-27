@@ -11,8 +11,9 @@ use PHPMailer\PHPMailer\Exception;
  *
  * @param PHPMailer $mail The PHPMailer instance to configure.
  */
-function configure_smtp(PHPMailer $mail): void
+function configure_smtp(PHPMailer $mail, string|null $email, string|null $name): void
 {
+
     // Server settings
     $mail->isSMTP();
     $mail->Host       = SMTP_HOST;
@@ -21,7 +22,7 @@ function configure_smtp(PHPMailer $mail): void
     $mail->Password   = SMTP_PASSWORD;
     $mail->SMTPSecure = SMTP_SECURE;
     $mail->Port       = SMTP_PORT;
-    $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
+    $mail->setFrom($email ? $email : SMTP_FROM_EMAIL, $name ? $name : SMTP_FROM_NAME);
     $mail->isHTML(true);
     $mail->CharSet = 'UTF-8'; // Ensure correct handling of special characters
 }
@@ -33,12 +34,15 @@ function configure_smtp(PHPMailer $mail): void
  */
 function send_business_email(string $first_name, string $last_name, string $email, string $message, ?string $phone): void
 {
+
+    $name = $first_name . ' ' . $last_name;
+
     $mail = new PHPMailer(true);
-    configure_smtp($mail);
+    configure_smtp($mail, $email, $name);
 
     // Recipient: The business owner
     $mail->addAddress(BUSINESS_RECIPIENT_EMAIL, BUSINESS_RECIPIENT_NAME);
-    $mail->Subject = 'Nieuw bericht van de website: ' . $first_name . ' ' . $last_name;
+    $mail->Subject = 'Nieuw bericht van de website: ' . $name;
 
     // Content (Uses templates defined in email_templates.php)
     $mail->Body    = generate_business_html_body($first_name, $last_name, $email, $message, $phone);
@@ -55,7 +59,7 @@ function send_business_email(string $first_name, string $last_name, string $emai
 function send_client_email(string $first_name, string $last_name, string $email, string $message, ?string $phone): void
 {
     $mail = new PHPMailer(true);
-    configure_smtp($mail);
+    configure_smtp($mail, null, null);
 
     // Recipient: The client (sender of the form)
     $mail->addAddress($email, $first_name . ' ' . $last_name);

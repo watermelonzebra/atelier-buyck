@@ -158,10 +158,14 @@ const handleSubmit = async (e: Event) => {
         </div>
         <p
           v-if="message"
-          :style="{ color: message.key === 'succes' ? 'green' : 'red' }"
-        >
-          {{ message.value }}
-        </p>
+          :style="{
+            backgroundColor:
+              message.key === 'succes' ? 'var(--main-dark)' : 'red',
+            color: 'var(--white)',
+            borderRadius: '1rem',
+          }"
+          v-html="message.value"
+        ></p>
         <p>
           Door dit formulier in te dienen, gaat u ermee akkoord dat wij uw
           gegevens gebruiken om contact met u op te nemen over uw vraag, zoals

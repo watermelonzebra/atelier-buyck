@@ -133,8 +133,8 @@ onMounted(async () => {
         <p>scroll en ontdek</p>
       </div>
       <p class="fold__content-description">
-        Wij creëren maatwerk interieurs met een focus op detail, vakmanschap en
-        de realisatie van uw unieke woonambities.
+        Met aandacht voor detail en hoogwaardig vakmanschap realiseren wij
+        maatwerkinterieurs die naadloos aansluiten op uw unieke woonambities.
         <RouterLink :to="{ name: 'Contact' }">
           <span>Offerte Aanvragen</span>
         </RouterLink>
