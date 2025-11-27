@@ -434,8 +434,12 @@ textarea {
 }
 
 .contact-data__img {
-  width: auto;
   height: auto;
+  width: auto;
+
+  max-width: 40rem;
+  max-height: 40rem;
+
   aspect-ratio: 1/1;
 }
 
