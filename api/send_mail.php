@@ -141,9 +141,9 @@ try {
         $contactData->phone
     );
 
-    send_json_response(true, 'Message sent successfully. Thank you!', 200);
+    send_json_response(true, 'Uw bericht is verzonden. Thank you! (check je spam)', 200);
 } catch (Exception $e) {
     // Log the detailed error but send a generic message back to the client
     error_log("PHPMailer Error: " . $e->getMessage());
-    send_json_response(false, 'Failed to send message due to a server error.', 500);
+    send_json_response(false, 'Er ging iets mis bij ons. Als dit blijft gebeuren gelieve ons te contacteren!', 500);
 }

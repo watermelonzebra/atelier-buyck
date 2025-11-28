@@ -55,7 +55,7 @@ function generate_business_html_body(string $first_name, string $last_name, stri
                     border-left: 3px solid #366c6c;
                   '
                 >
-                  ' . nl2br(htmlspecialchars($message)) . '
+                  " . nl2br(htmlspecialchars($message)) . "
                 </div>
               </div>
             </div>
@@ -130,7 +130,7 @@ function generate_client_html_body(string $first_name, string $last_name, string
                     border-left: 3px solid #366c6c;
                   '
                 >
-                  ' . nl2br(htmlspecialchars($message)) . '
+                  " . nl2br(htmlspecialchars($message)) . "
                 </div>
               </div>
               <hr style='margin-top: 20px' />
