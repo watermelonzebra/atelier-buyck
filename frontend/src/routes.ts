@@ -61,7 +61,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_APP_BASE_URL),
+  history: createWebHistory(),
   routes,
   scrollBehavior: async (_to, _from, _savedPosition) => {
     return { left: 0, top: 0, behavior: "instant" };
