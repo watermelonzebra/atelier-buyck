@@ -13,7 +13,7 @@ define('API_KEY', 'zlwsspvPaBVZHLFoDu2YNIfRkeYzeGep6mzfMDfWCrcTluEL5zUHy1C9mdO0P
 // --- CORS Configuration ---
 // Define allowed origins. Use '*' for all (not recommended for production).
 // In a real application, you might load this from a .env file.
-const ALLOWED_ORIGINS = ['*', 'https://test.atelierbuyck.be', 'https://atelierbuyck.be'];
+const ALLOWED_ORIGINS = ['https://test.atelierbuyck.be', 'https://atelierbuyck.be'];
 
 // --- Email Recipients & Sender ---
 // The email address that receives the contact form submissions (the business).

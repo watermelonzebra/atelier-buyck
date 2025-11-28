@@ -438,8 +438,8 @@ textarea {
 }
 
 .contact-data__img {
-  height: auto;
-  width: auto;
+  height: 100%;
+  width: 100%;
 
   max-width: 40rem;
   max-height: 40rem;

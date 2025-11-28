@@ -73,7 +73,7 @@ onMounted(async () => {
             ".fold__firmname",
             {
               ease: "expo.inOut",
-              scale: 100,
+              scale: 120,
               color: "var(--main-darkest)",
             },
             ">0.1"

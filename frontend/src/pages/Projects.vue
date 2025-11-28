@@ -86,6 +86,12 @@ onMounted(async () => {
       font-size: 4vw;
     }
   }
+
+  @media screen and (min-width: 1500px) {
+    > h2 {
+      font-size: 6.5rem;
+    }
+  }
 }
 
 .projects__list {
